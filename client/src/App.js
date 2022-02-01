@@ -1,47 +1,31 @@
-import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import "./App.css";
+import PatientTable from "./pages/PatientTable";
+import PatientDetailsPage from "./pages/PatientDetailsPage";
+import Header from "./components/Header";
+import NotFound from "./pages/NotFound";
+import AddPatient from "./pages/AddPatient";
+// MUI
+import { CssBaseline } from "@mui/material";
 
-// Constants
-import { routes } from './constants';
-
-// Styles
-import { CssBaseline } from '@material-ui/core';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles/App.css';
-
-// Static/Stateless
-import { NavBar, Welcome } from './components';
-
-// Pages
-import { ItemInsert, Items, ItemUpdate } from './pages';
-
-class App extends Component {
-  render() {
-    // TODO: maybe only need one route for Items?
-    const publicViews = (
-      <Switch>
-        <Route exact path={routes.HOME}>
-          <Redirect to={routes.ITEMS} />
-        </Route>
-        <Route exact path={routes.ITEM_UPDATE} component={ItemUpdate} />
-        <Route exact path={routes.HOME} component={Welcome} />
-        <Route exact path={routes.ITEMS} component={Items} />
-        <Route exact path={`${routes.ITEMS}/items-plain`} component={Items} />
-        <Route exact path={`${routes.ITEMS}/react-table-v6`} component={Items} />
-        <Route exact path={routes.ITEM_INSERT} component={ItemInsert} />
-      </Switch>
-    );
-
-    return (
-      <BrowserRouter>
-        <CssBaseline />
-        <NavBar />
-        <div className="app--main">
-          <div className="view-container">{publicViews}</div>
-        </div>
-      </BrowserRouter>
-    );
-  }
+function App() {
+  return (
+    <Router>
+      <CssBaseline />
+      <Header />
+      <Routes>
+        <Route path="/" element={<PatientTable />} exact />
+        <Route path="/items" element={<PatientTable />} />
+        <Route
+          path="/item/:patient_id"
+          element={<PatientDetailsPage />}
+        />
+        <Route path="/item/add" element={<AddPatient />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
