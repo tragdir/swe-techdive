@@ -16,14 +16,14 @@ const PatientSchema = new Schema(
         zip: Number,
         latest_bmi: Number,
         latest_weight: Number,
-        latest_height: String,
-        test_name: String,
         icu_admit: String,
         mortality: String,
 
     },
 
     { timestamps: true },
+    { versionKey: false },
+
 );
 
 export const Patient = mongoose.model('Patient', PatientSchema);
