@@ -15,7 +15,6 @@ const ExamSchema = new Schema(
             require: true
         },
         examInfo: String,
-        date: Date,
         keyFindings: String
     },
 

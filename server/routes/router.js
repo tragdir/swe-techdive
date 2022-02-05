@@ -7,21 +7,24 @@ import {getItems,
     createItem,
     updateItem,
     deleteItem,
-   } from '../controllers/patient-controller.js';
+   } from '../controllers/item-controller.js';
 
 export const router = express.Router();
 
+//**PATIENT SCHEMA */
 router.get('/patients',  getItems(Patient, "patients"));
 router.get('/patient/:id',  getItemById(Patient, 'patient'));
 router.post('/patient',  createItem(Patient, "patient"));
 router.put('/patient/:id',  updateItem(Patient, "patient"));
-router.delete('/patient/:id',  deleteItem(Patient, "patient"));
+router.delete('/patient/:id',  deleteItem("patient"));
 
+
+//**EXAM SCHEMA */
 router.get('/exams',  getItems(Exam, "exams"));
 router.get('/exam/:id',  getItemById(Exam, 'exam'));
 router.post('/exam/:id',  createItem(Exam, "exam"));
 router.put('/exam/:id',  updateItem(Exam, "exam"));
-router.delete('/exam/:id',  deleteItem(Exam, "exam"));
+router.delete('/exam/:id',  deleteItem("exam"));
 
 
 // module.exports = router;
