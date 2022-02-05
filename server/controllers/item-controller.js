@@ -1,7 +1,7 @@
 /* eslint-disable no-undef, arrow-body-style */
 
-import { Exam } from "../models/exam-model.js";
-import { Patient } from "../models/patient-model.js";
+//import { Exam } from "../models/exam-model.js";
+//import { Patient } from "../models/patient-model.js";
 
 export const getItems = (schemaName, name) => {
   return async (req, res) => {
@@ -51,7 +51,7 @@ export const getItemById = (schemaName, name) => {
         });
       }
       console.log(`Hack_avengers - 200 in 'getItemById': ${name} fetched!`);
-      return res.status(200).json(items[0]);
+      return res.status(200).json(items);
     }).catch(err => {
       console.error(`Hack_avengers - caught error in 'getItemsById': ${err}`);
       console.error(err);
@@ -75,11 +75,10 @@ export const createItem = (schemaName, name) => {
 
     let item;
     if (name === "exam") {
-      item = new Exam({
+      item = new schemaName({
         image: body.image,
         score: body.score,
         examInfo: body.examInfo,
-        date: body.date,
         keyFindings: body.keyFindings,
         patient: id
       }); //create new record for exam
@@ -129,6 +128,7 @@ export const createItem = (schemaName, name) => {
 
 export const updateItem = (schemaName, name) => {
   return async (req, res) => {
+
     const body = req.body;
     const arryOfItem = [body]
     if (!body) {
@@ -162,12 +162,12 @@ export const updateItem = (schemaName, name) => {
   };
 }
 
-export const deleteItem = (name) => {
+export const deleteItem = (PatientSchema, ExamSchema, name) => {
   return async (req, res) => {
     // delete from both patient and exam
     if (name === "patient") {
       //** DELETING FROM PATIENT SCHEMA*/
-      await Patient.findOneAndDelete({ _id: req.params.id }, { projection: "Exam" }, (err, item) => {
+      await PatientSchema.findOneAndDelete({ _id: req.params.id }, (err, item) => {
         if (err) {
           console.error(`Hack_avengers - 400 in 'delete${name}': ${err}`);
           return res.status(400).json({
@@ -196,9 +196,9 @@ export const deleteItem = (name) => {
       //if (deletedPatient.Exam) {
 
       //** DELETING FROM EXAM SCHEMA*/
-        await Exam.deleteOne({ patient: req.params.id }, (err, item) => {
+        await ExamSchema.deleteOne({ patient: req.params.id }, (err, item) => {
           if (err) {
-            console.error(`Hack_avengers - 400 in 'delete${name}': ${err}`);
+            console.error(`Hack_avengers - 400 in 'delete exam': ${err}`);
             return res.status(400).json({
               succes: false,
               error: err,
@@ -226,7 +226,7 @@ export const deleteItem = (name) => {
     } else {
 
       // delete only from exam schema
-      await Exam.findOneAndDelete({ patient: req.params.id }, (err, item) => {
+      await ExamSchema.findOneAndDelete({ patient: req.params.id }, (err, item) => {
         if (err) {
           console.error(`Hack_avengers - 400 in 'delete${name}': ${err}`);
           return res.status(400).json({
