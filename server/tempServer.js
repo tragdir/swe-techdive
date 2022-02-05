@@ -9,13 +9,11 @@ import { patientImgStudies } from "./tempSeeds/patientFormatedInfo.js";
 const app = express();
 app.use(express.json());
 const PORT = process.env.PORT || 8000;
-console.log(patientInfo);
-
-app.get("/api/patient/data", (req, res) => {
+app.get("/patients", (req, res) => {
   res.status(200).json(patientInfo);
 });
 
-app.get("/api/patient/data/:patient_id", (req, res) => {
+app.get("/patient/:patient_id", (req, res) => {
   const patientId = req.params.patient_id;
   const patientDetails = patientImgStudies
     .map((item) => item)
