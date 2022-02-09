@@ -14,7 +14,6 @@ const ExamSchema = new Schema(
             type: [Number],
             require: true
         },
-        examInfo: String,
         keyFindings: String
     },
 

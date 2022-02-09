@@ -7,6 +7,7 @@ import {getItems,
     createItem,
     updateItem,
     deleteItem,
+    getFromTwoSchema,
    } from '../controllers/item-controller.js';
 
 export const router = express.Router();
@@ -25,6 +26,9 @@ router.get('/exam/:id',  getItemById(Exam, 'exam'));
 router.post('/exam/:id',  createItem(Exam, "exam"));
 router.put('/exam/:id',  updateItem(Exam, "exam"));
 router.delete('/exam/:id',  deleteItem(Patient, Exam,"exam"));
+
+//**GET BOTH DATAS */
+router.get('/data',  getFromTwoSchema(Patient, Exam, "exams"));
 
 
 // module.exports = router;
