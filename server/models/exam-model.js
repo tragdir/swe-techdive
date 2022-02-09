@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-import {Patient} from "../models/patient-model.js"
+//import {Patient} from "../models/patient-model.js"
 const Schema = mongoose.Schema;
 
 const ExamSchema = new Schema(
@@ -14,8 +14,6 @@ const ExamSchema = new Schema(
             type: [Number],
             require: true
         },
-        examInfo: String,
-        date: Date,
         keyFindings: String
     },
 
