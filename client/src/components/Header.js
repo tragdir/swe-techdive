@@ -8,7 +8,7 @@ import CoronavirusIcon from "@mui/icons-material/Coronavirus";
 import Typography from "@mui/material/Typography";
 
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { Button, Paper } from "@mui/material";
+import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 
 export default function Header() {
@@ -41,6 +41,20 @@ export default function Header() {
           >
             COVID-19 Radiology
           </Typography>
+          {/* 00000000000000000000000000000000000000000000000000000000000000000000 */}
+          {/* <Box sx={{marginLeft: "2rem"}} >
+            <Link to={"/admin"} style={linkStyle}>
+              <Button
+                variant="outlined"
+                size="large"
+                edge="end"
+                color="inherit"
+              >
+                Admin &nbsp;
+              </Button>
+            </Link>
+          </Box> */}
+          {/* 9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999 */}
 
           <Box sx={{ flexGrow: 1 }} />
           <Box
@@ -51,13 +65,11 @@ export default function Header() {
               justifyContent: "space-between",
             }}
           >
-            <Link to={"/patient/add"} style={linkStyle}>
+            <Link to={"/admin"} style={linkStyle}>
               <Button
                 variant="outlined"
                 size="large"
                 edge="end"
-                aria-label="account of current user"
-                aria-haspopup="true"
                 color="inherit"
               >
                 Add Data &nbsp;

@@ -6,16 +6,18 @@ import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
 import { Container, Alert } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import { CardMedia } from '@mui/material';
 
 
 const PatientTable = () => {
   const [patientInfo, setPatientInfo] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  // const [examInfo, setExamInfo] = useState([]);
   
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await axios.get(`/patients`);
+        const result = await axios.get(`api/patients`);
         const body = await result.data;
         setPatientInfo(body);
         setIsLoading(false)
@@ -26,12 +28,15 @@ const PatientTable = () => {
 
     fetchData();
   }, []);
+
+
+
   
   const columns = useMemo(
     () =>
       patientInfo[0]
         ? Object.keys(patientInfo[0]).map((key) => {
-            if (key === "patient_id")
+            if (key === "patient"){
               return {
                 Header: "SUBJECT ID",
                 accessor: key,
@@ -45,15 +50,33 @@ const PatientTable = () => {
                   
                 ),
               };
-                        
-            return {
-              Header: "COMORBIDITIES",
-              columns: [
-                {
-                  Header: key.toUpperCase().replaceAll("_", " "),
+            }
+
+              if (key === "png_filename"){
+                return {
+                  Header: "Xray",
                   accessor: key,
-                },
-              ],
+                  Cell: ({ value }) => <CardMedia 
+                  component="img"
+                  height="80"
+                  image={`https://ohif-hack-diversity-covid.s3.amazonaws.com/covid-png/${value}`}
+                  alt="xray-image"
+                  />                                  
+                };
+              }
+              if (key === "brixia"){
+                return {
+                  Header: key,
+                  accessor: key,
+                  Cell: ({ value }) => value.join(",")                   
+                };
+              }
+              
+            return {
+             
+                Header: key.toUpperCase().replaceAll("_", " "),
+                accessor: key,
+          
             };
           })
         : [],

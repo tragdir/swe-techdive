@@ -8,7 +8,8 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { styled } from '@mui/material/styles';
-import { useTable } from "react-table";
+import { useTable, useGlobalFilter} from "react-table";
+import GlobalFilter from "./GlobalFilter";
 
 //  ************* Styled Table *************
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -35,13 +36,36 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const PTable = ({ columns, data }) => {
   // Use the state and functions returned from useTable to build your UI
-  const { getTableProps, headerGroups, rows, prepareRow } = useTable({
+  // const { getTableProps, headerGroups, rows, prepareRow, preGlobalFilteredRows, setGlobalFilter, state } = useTable({
+  //   columns,
+  //   data,
+  //   useGlobalFilter,
+  //   initialState: {
+  //     hiddenColumns: ["createdAt", "updatedAt", "__v", "_id", "race", "patient_id"]
+  //   }
+  // });
+
+  const tableInstance = useTable(  
+    {
     columns,
     data,
     initialState: {
-      hiddenColumns: ["createdAt", "updatedAt", "__v"]
+      hiddenColumns: ["createdAt", "updatedAt", "__v", "_id", "race", "patient_id"]
     }
-  });
+    },
+    useGlobalFilter,
+  )
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    preGlobalFilteredRows,
+    setGlobalFilter,
+    state,
+  } = tableInstance;
+
   // Render the UI for your table
   // Material UI
   const [page, setPage] = React.useState(0);
@@ -60,6 +84,8 @@ const PTable = ({ columns, data }) => {
   return (
     <Paper sx={{ width: "100%", overflow: "hidden", margin: ".6rem" }}>
       <TableContainer sx={{ maxHeight: 600 }}>
+        <GlobalFilter preGlobalFilteredRows={preGlobalFilteredRows} 
+        setGlobalFilter={setGlobalFilter} globalFilter={state.globalFilter}/>
         <Table {...getTableProps()} stickyHeader aria-label="sticky table">
           <TableHead>
             {headerGroups.map((headerGroup) => (
