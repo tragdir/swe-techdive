@@ -5,7 +5,8 @@ import PatientTable from "./pages/PatientTable";
 import PatientDetailsPage from "./pages/PatientDetailsPage";
 import Header from "./components/Header";
 import NotFound from "./pages/NotFound";
-import AddPatient from "./pages/AddPatient";
+// import AddPatient from "./pages/AddPatient";
+import AdminTable from "./pages/AdminTable";
 // MUI
 import { CssBaseline } from "@mui/material";
 
@@ -21,7 +22,7 @@ function App() {
           path="/patient/:patient_id"
           element={<PatientDetailsPage />}
         />
-        <Route path="/patient/add" element={<AddPatient />} />
+        <Route path="/admin" element={<AdminTable />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
