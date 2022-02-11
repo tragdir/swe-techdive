@@ -3,10 +3,6 @@ const Schema = mongoose.Schema;
 
 const PatientSchema = new Schema(
     {
-        name: {
-            type: String,
-            required: true
-        },
         age: Number,
         sex: {
             type: String,
@@ -15,7 +11,6 @@ const PatientSchema = new Schema(
         race: String,
         zip: Number,
         latest_bmi: Number,
-        latest_weight: Number,
         icu_admit: String,
         mortality: String,
 
