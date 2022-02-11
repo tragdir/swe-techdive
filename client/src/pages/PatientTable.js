@@ -13,7 +13,7 @@ const PatientTable = () => {
   const [patientInfo, setPatientInfo] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   // const [examInfo, setExamInfo] = useState([]);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -31,7 +31,7 @@ const PatientTable = () => {
 
 
 
-  
+
   const columns = useMemo(
     () =>
       patientInfo[0]
@@ -47,7 +47,7 @@ const PatientTable = () => {
                    </div>
                   <Link to={`/patient/${value}`} component="link" underline="hover">{value}</Link>
                   </div>
-                  
+
                 ),
               };
             }
@@ -56,27 +56,27 @@ const PatientTable = () => {
                 return {
                   Header: "Xray",
                   accessor: key,
-                  Cell: ({ value }) => <CardMedia 
+                  Cell: ({ value }) => <CardMedia
                   component="img"
                   height="80"
                   image={`https://ohif-hack-diversity-covid.s3.amazonaws.com/covid-png/${value}`}
                   alt="xray-image"
-                  />                                  
+                  />
                 };
               }
               if (key === "brixia"){
                 return {
                   Header: key,
                   accessor: key,
-                  Cell: ({ value }) => value.join(",")                   
+                  Cell: ({ value }) => value.join(",")
                 };
               }
-              
+
             return {
-             
+
                 Header: key.toUpperCase().replaceAll("_", " "),
                 accessor: key,
-          
+
             };
           })
         : [],
