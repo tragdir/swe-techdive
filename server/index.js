@@ -13,10 +13,11 @@ app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 // Databse config ************************************
-// we use .env when we use online database url
-// const dbUrl = process.env.DB_URL;
 //const dbUrl = process.env.DB_URL || "mongodb://127.0.0.1:27017/patientdb";
-const uri = "mongodb+srv://hereGoesMalik'sUserAndPssw@cluster0.vyrz3.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+// const uri = "mongodb+srv://hereGoesMalik'sUserAndPssw@cluster0.vyrz3.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+
+const uri = "mongodb+srv://hackavengers:hackavengersdb@cluster0.vyrz3.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+
 mongoose
   .connect(uri, {
     useNewUrlParser: true,
