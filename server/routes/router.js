@@ -8,7 +8,7 @@ import {getItems,
     updateItem,
     deleteItem,
     getFromTwoSchema,
-   } from '../controllers/item-controller.js';
+} from '../controllers/item-controller.js';
 
 export const router = express.Router();
 
@@ -29,6 +29,7 @@ router.delete('/exam/:id',  deleteItem(Patient, Exam,"exam"));
 
 //**GET BOTH DATAS */
 router.get('/data',  getFromTwoSchema(Patient, Exam, "exams"));
+// router.get('/data/:id',  getItemByIdFromTwoSchema(Patient, Exam, "exams"));
 
 
 // module.exports = router;

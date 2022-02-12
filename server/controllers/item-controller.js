@@ -264,20 +264,39 @@ export const getFromTwoSchema = (patientName, examName, name) => {
 
     const allData = examsDatas.map(async exam => {
       const patient = await patientName.find({_id: exam.patient});
-      console.log("Inside allData: ");
-      console.log(patient[0]);
-      return {...exam._doc, ...patient};
+      //console.log("Inside allData: ");
+      return {...exam._doc, ...patient._doc};
     });
 
 
     const items = await Promise.all(allData);
 
-    console.log("All Items: ");
+    //console.log("All Items: ");
 
-    console.log(items);
+    //console.log(items);
     return res.status(200).json(items);
   };
 };
+
+// export const getItemByIdFromTwoSchema = (patientName, examName, name) => {
+
+//   return async (req, res) => {
+//     let exam = await examName.find({patient: req.params.id});
+//     //console.log(examsDatas)
+
+//     const patient = await patientName.find({_id: req.params.id});
+//       //console.log(patient);
+//     var bothData = {...exam, ...patient}
+
+
+//     //console.log("All Items: ");
+
+//     console.log(bothData);
+//     return res.status(200).json(bothData);
+//   };
+// };
+
+
 
 //**FUNCTION TO INSER DATA FROM EXCEL (NO NEEDED THIS PROJECT) */
 // export const insertManyData = (schemaName)=>{

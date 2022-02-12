@@ -17,7 +17,7 @@ const PatientTable = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await axios.get(`api/patients`);
+        const result = await axios.get(`api/data`);
         const body = await result.data;
         setPatientInfo(body);
         setIsLoading(false)
@@ -52,9 +52,9 @@ const PatientTable = () => {
               };
             }
 
-              if (key === "png_filename"){
+              if (key === "image"){
                 return {
-                  Header: "Xray",
+                  Header: "X-RAY",
                   accessor: key,
                   Cell: ({ value }) => <CardMedia
                   component="img"
@@ -64,9 +64,9 @@ const PatientTable = () => {
                   />
                 };
               }
-              if (key === "brixia"){
+              if (key === "score"){
                 return {
-                  Header: key,
+                  Header: "SCORE",
                   accessor: key,
                   Cell: ({ value }) => value.join(",")
                 };

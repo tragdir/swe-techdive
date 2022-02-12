@@ -11,25 +11,52 @@ const PatientDetailsPage = () => {
   const [examInfo, setExamInfo] = useState([]);
   const [patientInfo, setPatientInfo] = useState([])
   const { patient_id } = useParams();
- 
+  const isMounted = React.useRef(true);
+
+
+  const fetchPatientData = async () => {
+    try {
+      var body = null;
+      if(isMounted){
+      const result = await axios.get(`/api/patient/${patient_id}`);
+      body = result.data;
+      console.log(body[0]);
+    }
+
+      setPatientInfo(body[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchExamData = async () => {
+    try {
+      var body = null;
+      if(isMounted){
+      const result = await axios.get(`/api/exam/${patient_id}`);
+      body = result.data;
+      console.log(body[0]);
+    }
+
+      setExamInfo(body[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   useEffect(() => {
-    const fetchData = async (name, id, stateType) => {
-      try {
-        const result = await axios.get(`/api/${name}/${id}`);
-        const body = result.data;
+    if(isMounted.current){
+      fetchPatientData();
+      fetchExamData();
 
-        stateType(body);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+}
+    return ()=> {isMounted.current = false}
+  }, []);
 
-    fetchData("exam", patient_id, setExamInfo);
-    fetchData("patient", patient_id, setPatientInfo);
-  }, [patient_id]);
 
-  const { key_findings, png_filename, brixia, patient } = examInfo;
+
+  const { key_findings, image, score, patient } = examInfo;
   // const spreadBrixia = brixia.join(",")
   // console.log(spreadBrixia)
   // const item = [patientInfo]
@@ -76,7 +103,7 @@ const PatientDetailsPage = () => {
                 </div>
               )
             })}
-           
+
           </CardContent>
         </Card>
         <Card sx={{ minWidth: 300, marginLeft: "1rem"}}>
@@ -98,29 +125,29 @@ const PatientDetailsPage = () => {
                 {key_findings}
               </Typography>
             </Paper>
-          
+
             <Typography variant="h5" component="div">
              URL:
             </Typography>
             <Paper variant="outlined">
               <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                {png_filename}
+                {image}
               </Typography>
             </Paper>
           <Paper>
           <CardMedia
             component="img"
             sx={{ width: 300 }}
-            image={`https://ohif-hack-diversity-covid.s3.amazonaws.com/covid-png/${png_filename}`}
+            image={`https://ohif-hack-diversity-covid.s3.amazonaws.com/covid-png/${image}`}
             alt="xr-image"
           />
           </Paper>
           <Typography variant="h5" component="div">
-             Brixia:
+            score:
             </Typography>
             <Paper variant="outlined">
               <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                {brixia.join(",")}
+                {score}
               </Typography>
             </Paper>
           </CardContent> : <Typography>Seems like no exam information for this subject ID: {patientInfo._id}</Typography>}
