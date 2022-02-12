@@ -8,8 +8,9 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { styled } from '@mui/material/styles';
-import { useTable, useGlobalFilter} from "react-table";
+import { useTable, useGlobalFilter, useSortBy} from "react-table";
 import GlobalFilter from "./GlobalFilter";
+import Button from '@mui/material/Button';
 
 //  ************* Styled Table *************
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -35,15 +36,21 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 const PTable = ({ columns, data }) => {
-  // Use the state and functions returned from useTable to build your UI
-  // const { getTableProps, headerGroups, rows, prepareRow, preGlobalFilteredRows, setGlobalFilter, state } = useTable({
-  //   columns,
-  //   data,
-  //   useGlobalFilter,
-  //   initialState: {
-  //     hiddenColumns: ["createdAt", "updatedAt", "__v", "_id", "race", "patient_id"]
-  //   }
-  // });
+
+  const actionButtons = (hooks) => {
+    hooks.visibleColumns.push((columns) => [
+      ...columns,
+      {
+        id: "Edit",
+        Header: "Edit",
+        Cell: ({ row }) => (
+          <Button variant="outlined" onClick={() => alert("Editing: " + row.values.id)}>
+            Edit
+          </Button>
+        ),
+      },
+    ]);
+  }
 
   const tableInstance = useTable(  
     {
@@ -54,6 +61,7 @@ const PTable = ({ columns, data }) => {
     }
     },
     useGlobalFilter,
+    useSortBy
   )
   const {
     getTableProps,
@@ -93,9 +101,10 @@ const PTable = ({ columns, data }) => {
                 {headerGroup.headers.map((column) => (
                   <StyledTableCell
                     style={{ minWidth: "170" }}
-                    {...column.getHeaderProps()}
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
                   >
                     {column.render("Header")}
+                    {column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼"): ""}
                   </StyledTableCell>
                 ))}
               </TableRow>
