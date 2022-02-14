@@ -17,7 +17,7 @@ const PatientTable = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await axios.get(`api/data`);
+        const result = await axios.get(`api/exams`);
         const body = await result.data;
         setPatientInfo(body);
         setIsLoading(false)
@@ -28,80 +28,42 @@ const PatientTable = () => {
 
     fetchData();
   }, []);
-
 // console.log(patientInfo)
-
-
-// ? Object.keys(patientInfo[0]).map((key) => {
-//   if (key === "patient"){
-//     return {
-//       Header: "SUBJECT ID",
-//       accessor: key,
-//       Cell: ({ value }) => (
-//         <div>
-//          <div>
-//          <AccountCircle/>
-//          </div>
-//         <Link to={`/patient/${value}`} component="link" underline="hover">{value}</Link>
-//         </div>
-
-//       ),
-//     };
-//   }
-
-//     if (key === "image"){
-//       return {
-//         Header: "X-RAY",
-//         accessor: key,
-//         Cell: ({ value }) => <CardMedia
-//         component="img"
-//         height="80"
-//         image={`https://ohif-hack-diversity-covid.s3.amazonaws.com/covid-png/${value}`}
-//         alt="xray-image"
-//         />
-//       };
-//     }
-//     if (key === "score"){
-//       return {
-//         Header: "SCORE",
-//         accessor: key,
-//         Cell: ({ value }) => value.join(",")
-//       };
-//     }
 
 
   const columns = useMemo(
     () =>
       patientInfo[0]
         ? Object.keys(patientInfo[0]).map((key) => {
-          if (key === "patient"){
+            if (key === "patient"){
               return {
-                  Header: "SUBJECT ID",
-                  accessor: key,
-                  Cell: ({ value }) => (
-                    <div>
-                     <div>
-                     <AccountCircle/>
-                     </div>
-                    <Link to={`/patient/${value}`} component="link" underline="hover">{value}</Link>
-                    </div>
+                Header: "SUBJECT ID",
+                accessor: key,
+                Cell: ({ value }) => (
+                  <div>
+                   <div>
+                   <AccountCircle/>
+                   </div>
+                  <Link to={`/patient/${value}`} component="link" underline="hover">{value}</Link>
+                  </div>
 
-                  ),
+                ),
+              };
+            }
+
+              if (key === "image"){
+                return {
+                  Header: "X-RAY",
+                  accessor: key,
+                  Cell: ({ value }) => <CardMedia
+                  component="img"
+                  height="80"
+                  width="50"
+                  image={`https://ohif-hack-diversity-covid.s3.amazonaws.com/covid-png/${value}`}
+                  alt="xray-image"
+                  />
                 };
               }
-
-                if (key === "image"){
-                  return {
-                    Header: "X-RAY",
-                    accessor: key,
-                    Cell: ({ value }) => <CardMedia
-                    component="img"
-                    height="80"
-                    image={`https://ohif-hack-diversity-covid.s3.amazonaws.com/covid-png/${value}`}
-                    alt="xray-image"
-                    />
-                  };
-                }
               if (key === "score"){
                 return {
                   Header: "SCORE",
