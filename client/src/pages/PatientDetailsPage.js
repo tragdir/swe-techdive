@@ -8,7 +8,6 @@ import { Container, Paper } from "@mui/material";
 import { CardMedia } from "@mui/material";
 
 const PatientDetailsPage = () => {
-  //const [isLoading, setIsLoading] = useState(true)
   const [examInfo, setExamInfo] = useState([]);
   const [patientInfo, setPatientInfo] = useState([])
   const { patient_id } = useParams();
@@ -63,47 +62,41 @@ const PatientDetailsPage = () => {
   // const item = [patientInfo]
   // console.log(...item)
 
-  // const patientRender = () => {
-  //   if(!isLoading){
-  //     const objKey = Object.keys(patientInfo[0])
-  //     return objKey
-  //   }
-  //   return;
-  // }
-
-  // patientRender();
-
-
   const objKey = Object.keys(patientInfo)
+
   return (
     <Container>
       <Paper sx={{padding: "1rem", marginBottom: "1rem"}}>
-      <Typography  sx={{textAlign: "center"}}>
-            Patient Details
-          </Typography>
+      <h2>We will add edit button on this page</h2>
+      <h3>
+        We can add delete button here or add within the table on the main page
+        🤔
+      </h3>
+
+      <h3>Nicolas is on it!</h3>
+      <h1>  {examInfo.length}</h1>
       </Paper>
       <div
         style={{
           display: "flex",
           alignContent: "center",
-          justifyContent: "space-around",
+          justifyContent: "space-between",
         }}
       >
-        {
         <Card sx={{ minWidth: 275 }}>
           <Typography>
             Patient Info:
           </Typography>
           <CardContent>
-            {patientInfo[0] && objKey.map((item, key) => {
+            {patientInfo && objKey.map((item, key) => {
               return (
-                <div key={key}>
+                <div>
                     <Typography variant="h5" component="div">
                {item}
               </Typography>
               <Paper variant="outlined">
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                 {patientInfo[0][item]}
+                 {patientInfo[item]}
                 </Typography>
               </Paper>
 
@@ -112,22 +105,24 @@ const PatientDetailsPage = () => {
             })}
 
           </CardContent>
-        </Card> } <h1>No data for patient</h1>
-
-        <Card sx={{ minWidth: 300, marginLeft: "1rem", flexDirection: 'row'}}>
-          <Typography>Exam Info:  Number of exam: #{examInfo.length}</Typography>
-          <div sx={{display: "flex", flexDirection: 'row'}}>
-          {examInfo?.map((item, index) => {
-
-            return (
-              <div key={index}>
-              <h3>Exam #{index}</h3>
-              <Paper variant="outlined">
+        </Card>
+        <Card sx={{ minWidth: 300, marginLeft: "1rem"}}>
+          <Typography>Exam Info:</Typography>
+         {examInfo.length !== 0 ? <CardContent>
+            <Typography variant="h5" component="div">
+              Patient:
+            </Typography>
+            <Paper variant="outlined">
               <Typography sx={{ mb: 1.5 }} color="text.secondary">
-               ID: {examInfo[index].patient}
+                {patient}
               </Typography>
+            </Paper>
+            <Typography variant="h5" component="div">
+              Radiologist Key Findings
+            </Typography>
+            <Paper variant="outlined">
               <Typography sx={{ mb: 1.5 }} color="text.secondary">
-               Exam Type: {examInfo[index].description}
+                {key_findings}
               </Typography>
             </Paper>
 
@@ -152,16 +147,10 @@ const PatientDetailsPage = () => {
             </Typography>
             <Paper variant="outlined">
               <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                {score.join(",")}
+                {score}
               </Typography>
             </Paper>
-
-              </div>
-            )
-
-          })}
-
-          </div>
+          </CardContent> : <Typography>Seems like no exam information for this subject ID: {patientInfo._id}</Typography>}
         </Card>
       </div>
     </Container>

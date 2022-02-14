@@ -35,7 +35,7 @@ const PatientTable = () => {
     () =>
       patientInfo[0]
         ? Object.keys(patientInfo[0]).map((key) => {
-            if (key === "_id"){
+            if (key === "patient"){
               return {
                 Header: "SUBJECT ID",
                 accessor: key,
