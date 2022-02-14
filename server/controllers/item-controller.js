@@ -271,7 +271,7 @@ export const getFromTwoSchema = (patientName, examName, name) => {
     let examsDatas = await examName.find({});
 
     const allData = examsDatas.map(async exam => {
-      const patient = await patientName.find({_id: exam.patient});
+      const patient = await patientName.findOne({_id: exam.patient});
       //console.log("Inside allData: ");
       return {...exam._doc, ...patient._doc};
     });

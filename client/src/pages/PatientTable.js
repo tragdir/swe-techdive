@@ -17,7 +17,7 @@ const PatientTable = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await axios.get(`api/exams`);
+        const result = await axios.get(`api/data`);
         const body = await result.data;
         setPatientInfo(body);
         setIsLoading(false)
