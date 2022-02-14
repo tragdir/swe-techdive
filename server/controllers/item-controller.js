@@ -265,44 +265,21 @@ export const deleteItem = (PatientSchema, ExamSchema, name) => {
   };
 }
 
-// export const getFromTwoSchema = (patientName, examName) => {
-//   return async (req, res) => {
-
-//     let examsDatas = await examName.find({});
-
-//     const allData = examsDatas.map(async exam => {
-//       const patient = await patientName.find({_id: exam.patient});
-//       //console.log("Inside allData: ");
-//       return {...exam._doc, ...patient._doc};
-//     });
-
-
-//     const items = await Promise.all(allData);
-
-//     //console.log("All Items: ");
-
-//     console.log(items);
-//     return res.status(200).json(items);
-//   };
-// };
-
-export const getFromTwoSchema = (patientName, examName) => {
+export const getFromTwoSchema = (patientName, examName, name) => {
   return async (req, res) => {
 
     let examsDatas = await examName.find({});
 
-    const allData = examsDatas.map(async exam =>{
-
-      const patient = await patientName.findOne({_id: exam.patient});
-      console.log("Inside allData: ");
-      console.log(patient);
-      return { ...patient,...exam._doc};
+    const allData = examsDatas.map(async exam => {
+      const patient = await patientName.find({_id: exam.patient});
+      //console.log("Inside allData: ");
+      return {...exam._doc, ...patient._doc};
     });
 
 
     const items = await Promise.all(allData);
 
-    console.log("All Items: ");
+    //console.log("All Items: ");
 
     //console.log(items);
     return res.status(200).json(items);
