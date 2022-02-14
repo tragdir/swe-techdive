@@ -257,27 +257,149 @@ export const deleteItem = (PatientSchema, ExamSchema, name) => {
   };
 }
 
-export const getFromTwoSchema = (patientName, examName, name) => {
+// export const getFromTwoSchema = (patientName, examName) => {
+//   return async (req, res) => {
+
+//     let examsDatas = await examName.find({});
+
+//     const allData = examsDatas.map(async exam => {
+//       const patient = await patientName.find({_id: exam.patient});
+//       //console.log("Inside allData: ");
+//       return {...exam._doc, ...patient._doc};
+//     });
+
+
+//     const items = await Promise.all(allData);
+
+//     //console.log("All Items: ");
+
+//     console.log(items);
+//     return res.status(200).json(items);
+//   };
+// };
+
+export const getFromTwoSchema = (patientName, examName) => {
   return async (req, res) => {
 
     let examsDatas = await examName.find({});
 
     const allData = examsDatas.map(async exam => {
-      const patient = await patientName.find({_id: exam.patient});
-      //console.log("Inside allData: ");
-      return {...exam._doc, ...patient._doc};
+      const patient = await patientName.findOne({_id: exam.patient});
+      console.log("Inside allData: ");
+      console.log(patient);
+      return { ...patient._doc,...exam._doc};
     });
 
 
     const items = await Promise.all(allData);
 
-    //console.log("All Items: ");
+    console.log("All Items: ");
 
     //console.log(items);
     return res.status(200).json(items);
   };
 };
 
+
+// [
+//   {
+//     "score": [
+//           0,
+//           1,
+//           3,
+//           1,
+//           0,
+//           2
+//       ],
+//       "_id": "62081d1bc83c452ef8e34e47",
+//       "description": "XR CHEST AP PORTABLE",
+//       "key_findings": "Subtle patchy bibasilar and right upper lobe airspace  opacities",
+//       "image": "COVID-19-AR-16434409_XR_CHEST_AP_PORTABLE_1.png",
+//       "patient": "6205576aaa478f466cca3809",
+//       "__v": 0,
+//       "createdAt": "2022-02-12T20:48:27.574Z",
+//       "updatedAt": "2022-02-12T20:48:27.574Z",
+//       "$__": {
+//           "strictMode": true,
+//           "selected": {},
+//           "getters": {},
+//           "_id": "6205576aaa478f466cca3809",
+//           "wasPopulated": false,
+//           "activePaths": {
+//               "paths": {
+//                   "_id": "init",
+//                   "age": "init",
+//                   "sex": "init",
+//                   "race": "init",
+//                   "zip": "init",
+//                   "latest_bmi": "init",
+//                   "mortality": "init",
+//                   "icu_admit": "init",
+//                   "__v": "init",
+//                   "createdAt": "init",
+//                   "updatedAt": "init"
+//               },
+//               "states": {
+//                   "ignore": {},
+//                   "default": {},
+//                   "init": {
+//                       "_id": true,
+//                       "age": true,
+//                       "sex": true,
+//                       "race": true,
+//                       "zip": true,
+//                       "latest_bmi": true,
+//                       "mortality": true,
+//                       "icu_admit": true,
+//                       "__v": true,
+//                       "createdAt": true,
+//                       "updatedAt": true
+//                   },
+//                   "modify": {},
+//                   "require": {}
+//               },
+//               "stateNames": [
+//                   "require",
+//                   "modify",
+//                   "init",
+//                   "default",
+//                   "ignore"
+//               ]
+//           },
+//           "pathsToScopes": {},
+//           "cachedRequired": {},
+//           "session": null,
+//           "$setCalled": {},
+//           "emitter": {
+//               "_events": {},
+//               "_eventsCount": 0,
+//               "_maxListeners": 0
+//           },
+//           "$options": {
+//               "skipId": true,
+//               "isNew": false,
+//               "willInit": true,
+//               "defaults": true
+//           }
+//       },
+//       "isNew": false,
+//       "$locals": {},
+//       "$op": null,
+//       "_doc": {
+//           "_id": "6205576aaa478f466cca3809",
+//           "age": 51,
+//           "sex": "M",
+//           "race": "BLACK OR AFRICAN AMERICAN",
+//           "zip": 722,
+//           "latest_bmi": 37.7,
+//           "mortality": "N",
+//           "icu_admit": "N",
+//           "__v": 0,
+//           "createdAt": "2022-02-10T18:20:26.451Z",
+//           "updatedAt": "2022-02-10T18:20:26.451Z"
+//       },
+//       "$init": true
+//   };
 // export const getItemByIdFromTwoSchema = (patientName, examName, name) => {
 
 //   return async (req, res) => {

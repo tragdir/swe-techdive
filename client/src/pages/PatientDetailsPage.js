@@ -147,7 +147,7 @@ const PatientDetailsPage = () => {
             </Typography>
             <Paper variant="outlined">
               <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                {score}
+                {score.join(",")}
               </Typography>
             </Paper>
           </CardContent> : <Typography>Seems like no exam information for this subject ID: {patientInfo._id}</Typography>}
