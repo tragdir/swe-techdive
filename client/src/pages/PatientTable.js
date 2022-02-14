@@ -28,6 +28,7 @@ const PatientTable = () => {
 
     fetchData();
   }, []);
+
 // console.log(patientInfo)
 
 
