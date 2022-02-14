@@ -82,7 +82,7 @@ const PatientTable = () => {
     [patientInfo]
   );
 
-  console.log(patientInfo)
+  // console.log(patientInfo)
 
   const data = useMemo(() => [...patientInfo], [patientInfo]);
 

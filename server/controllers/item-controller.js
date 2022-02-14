@@ -162,6 +162,7 @@ export const updateItem = (schemaName, name) => {
 
 export const deleteItem = (PatientSchema, ExamSchema, name) => {
   return async (req, res) => {
+    const oneExam = await ExamSchema.findOne({ patient: req.params.id });
     // delete from both patient and exam
     if (name === "patient") {
       //** DELETING FROM PATIENT SCHEMA*/
@@ -175,17 +176,20 @@ export const deleteItem = (PatientSchema, ExamSchema, name) => {
         }
 
         if (!item) {
-          // console.error(`Hack_avengers - 400 in 'delete${name}': ${name} not found!`);
+          console.error(`Hack_avengers - 400 in 'delete${name}': ${name} not found!`);
           return res.status(400).json({
             success: false,
             error: `${name} not found!`,
           });
         }
 
-        // return res.status(200).json({
-        //   success: true,
-        //   item: item,
-        // });
+        if(!oneExam){
+          return res.status(200).json({
+            success: true,
+            // item: item,
+          });
+        }
+        
       }).catch(err => {
         console.error(`Hack_avengers - caught error in 'delete${name}': ${err}`);
         console.error(err);
@@ -194,34 +198,39 @@ export const deleteItem = (PatientSchema, ExamSchema, name) => {
       //if (deletedPatient.Exam) {
 
       //** DELETING FROM EXAM SCHEMA*/
-        await ExamSchema.deleteOne({ patient: req.params.id }, (err, item) => {
-          if (err) {
-            console.error(`Hack_avengers - 400 in 'delete exam': ${err}`);
-            return res.status(400).json({
-              succes: false,
-              error: err,
-            });
-          }
 
-          if (!item) {
-            console.error(`Hack_avengers - 400 in 'delete${name}': ${name} not found!`);
-            return res.status(400).json({
-              success: false,
-              error: `exam data not found!`,
-            });
-          }
-// ***************** here is the error ⬇ ****************************************
-          return (
-            res.setHeader('Content-Type', 'application/json'),
-            res.status(200).json({
-            success: true,
-            item: item,
-          }));
-        }).catch(err => {
-          console.error(`Hack_avengers - caught error in 'delete${name}': ${err}`);
-          console.error(err);
-          return err;
-        });
+
+        if(!oneExam){
+          return;
+        } else {
+          await ExamSchema.deleteOne({ patient: req.params.id }, (err, item) => {
+            if (err) {
+              console.error(`Hack_avengers - 400 in 'delete exam': ${err}`);
+              return res.status(400).json({
+                succes: false,
+                error: err,
+              });
+            }
+  
+            if (!item) {
+              console.error(`Hack_avengers - 400 in 'delete${name}': ${name} not found!`);
+              return res.status(400).json({
+                success: false,
+                error: `exam data not found!`,
+              });
+            }
+  
+            return (
+              // res.setHeader('Content-Type', 'application/json'),
+              res.status(200).json({
+              success: true,
+            }));
+          }).catch(err => {
+            console.error(`Hack_avengers - caught error in 'delete${name}': ${err}`);
+            console.error(err);
+            return err;
+          });
+        }
     } else {
 
       // delete only from exam schema
@@ -243,10 +252,8 @@ export const deleteItem = (PatientSchema, ExamSchema, name) => {
         }
 
         return (
-        res.setHeader('Content-Type', 'application/json'),
         res.status(200).json({
           success: true,
-          item: item,
         }));
       }).catch(err => {
         console.error(`Hack_avengers - caught error in 'delete${name}': ${err}`);
@@ -273,13 +280,25 @@ export const getFromTwoSchema = (patientName, examName, name) => {
 
     const items = await Promise.all(allData);
     // console.log(items)
-   const file = items.map(item => item)
+   const file = items.map(item => item).map(stuff => stuff).reduce((accumulator, item) => {
+    return [{...accumulator, ...item}];
+  }, []);
   //   const newItem = items.map(item => item)
   //   //  console.log(...newItem)
   //  const file = [...newItem]
 
   //   console.log(...items)
     // let merged = {...items}
+
+    // let merged = {};
+    // file.map(item => merged={...merged, ...item})
+    console.log(file)
+
+    // const result = file.reduce((accumulator, item) => {
+    //   return [{...accumulator, ...item}];
+    // }, []);
+    // console.log(result)
+
     return res.status(200).json(file);
   };
 };

@@ -49,27 +49,56 @@ const PTable = ({ columns, data, setPatientInfo }) => {
   const [idOfItemToDelete, setIdOfItemToDelte]  = React.useState('')
   const [deleteSuccess, setDeleteSuccess] = React.useState(false)
     // Delete item from table
+  //   const isMounted = React.useRef(true);
+
+
+  //   const deleteItem = async (id) => {
+  //     try {
+  //       if(isMounted.current) {
+  //         setIdOfItemToDelte(id)
+  //         const result = await axios.delete(`/api/patient/${id}`)
+  //         setDeleteSuccess(true)
+  //         console.log(result.data)
+  //         setIdOfItemToDelte("")
+  //       }
+  //     } catch (error) {
+  //       console.log(error)
+  //       setDeleteSuccess(false)
+  //     }
+  //   }
+
+  //   React.useEffect(() => {
+  //     if(isMounted.current){
+  //       deleteItem(idOfItemToDelete)
+  // }
+  //     return ()=> {isMounted.current = false}
+  //   }, []);
+
   React.useEffect(() => {
     const deleteItem = async (id) => {
       try {
-        setIdOfItemToDelte(id)
-        const result = await axios.delete(`/api/patient/${id}`)
-        setDeleteSuccess(true)
-        console.log(result.data)
-        setDeleteSuccess(false)
-        setIdOfItemToDelte("")
+        if(idOfItemToDelete !== '') {
+          const result = await axios.delete(`/api/patient/${id}`)
+          setDeleteSuccess(true)
+          console.log(result.data)
+          setIdOfItemToDelte("")
+        }
       } catch (error) {
         console.log(error)
       }
     }
+    // setDeleteSuccess(false)
     deleteItem(idOfItemToDelete);
     
-  }, [idOfItemToDelete])
-
+  }, [idOfItemToDelete, deleteSuccess])
+  
+// console.log(deleteSuccess)
+// console.log(idOfItemToDelete)
 
   React.useEffect(() => {
-    setPatientInfo(deleteSuccess ? data.filter(item => item.patient !== idOfItemToDelete) : data)
-  }, [deleteSuccess])
+    setPatientInfo(deleteSuccess ? data.filter(item => item._id !== idOfItemToDelete) : data)
+    // setDeleteSuccess(false)
+  }, [deleteSuccess, idOfItemToDelete])
 
   const actionButtons = (hooks) => {
     hooks.visibleColumns.push((columns) => [
