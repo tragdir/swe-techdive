@@ -17,7 +17,7 @@ const PatientTable = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await axios.get(`api/data`);
+        const result = await axios.get(`api/exams`);
         const body = await result.data;
         setPatientInfo(body);
         setIsLoading(false)
@@ -28,15 +28,14 @@ const PatientTable = () => {
 
     fetchData();
   }, []);
-
-
+// console.log(patientInfo)
 
 
   const columns = useMemo(
     () =>
       patientInfo[0]
         ? Object.keys(patientInfo[0]).map((key) => {
-            if (key === "patient"){
+            if (key === "_id"){
               return {
                 Header: "SUBJECT ID",
                 accessor: key,
@@ -59,6 +58,7 @@ const PatientTable = () => {
                   Cell: ({ value }) => <CardMedia
                   component="img"
                   height="80"
+                  width="50"
                   image={`https://ohif-hack-diversity-covid.s3.amazonaws.com/covid-png/${value}`}
                   alt="xray-image"
                   />
@@ -82,6 +82,8 @@ const PatientTable = () => {
         : [],
     [patientInfo]
   );
+
+  // console.log(patientInfo)
 
   const data = useMemo(() => [...patientInfo], [patientInfo]);
 
@@ -109,7 +111,7 @@ const PatientTable = () => {
 
   return (
     <div>
-      <Table columns={columns} data={data} />
+      <Table columns={columns} data={data} setPatientInfo={setPatientInfo} />
     </div>
   );
 };
