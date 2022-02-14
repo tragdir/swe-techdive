@@ -7,8 +7,10 @@ import Header from "./components/Header";
 import NotFound from "./pages/NotFound";
 // import AddPatient from "./pages/AddPatient";
 import AdminTable from "./pages/AdminTable";
+import EditPage from "./pages/EditPage";
 // MUI
 import { CssBaseline } from "@mui/material";
+
 
 function App() {
   return (
@@ -16,13 +18,15 @@ function App() {
       <CssBaseline />
       <Header />
       <Routes>
-        <Route path="/" element={<PatientTable />} exact />
-        <Route path="/patients" element={<PatientTable />} />
+        <Route path="/" element={<PatientTable  />} exact />
+        <Route path="/patients" element={<PatientTable  />} />
         <Route
           path="/patient/:patient_id"
           element={<PatientDetailsPage />}
         />
-        <Route path="/admin" element={<AdminTable />} />
+        <Route path="/admin" element={<PatientTable />} />
+        <Route path="/patient/:id/edit" element={<EditPage/>} />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

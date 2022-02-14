@@ -28,15 +28,13 @@ const PatientTable = () => {
 
     fetchData();
   }, []);
-
-
-
+// console.log(patientInfo)
 
   const columns = useMemo(
     () =>
       patientInfo[0]
         ? Object.keys(patientInfo[0]).map((key) => {
-            if (key === "patient"){
+            if (key === "_id"){
               return {
                 Header: "SUBJECT ID",
                 accessor: key,
@@ -52,19 +50,20 @@ const PatientTable = () => {
               };
             }
 
-              if (key === "png_filename"){
+              if (key === "image"){
                 return {
                   Header: "Xray",
                   accessor: key,
                   Cell: ({ value }) => <CardMedia
                   component="img"
                   height="80"
+                  width="50"
                   image={`https://ohif-hack-diversity-covid.s3.amazonaws.com/covid-png/${value}`}
                   alt="xray-image"
                   />
                 };
               }
-              if (key === "brixia"){
+              if (key === "score"){
                 return {
                   Header: key,
                   accessor: key,
@@ -82,6 +81,8 @@ const PatientTable = () => {
         : [],
     [patientInfo]
   );
+
+  console.log(patientInfo)
 
   const data = useMemo(() => [...patientInfo], [patientInfo]);
 
@@ -109,7 +110,7 @@ const PatientTable = () => {
 
   return (
     <div>
-      <Table columns={columns} data={data} />
+      <Table columns={columns} data={data} setPatientInfo={setPatientInfo} />
     </div>
   );
 };

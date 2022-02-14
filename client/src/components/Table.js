@@ -10,7 +10,16 @@ import TableRow from "@mui/material/TableRow";
 import { styled } from '@mui/material/styles';
 import { useTable, useGlobalFilter, useSortBy} from "react-table";
 import GlobalFilter from "./GlobalFilter";
+
+// ******************************************************
 import Button from '@mui/material/Button';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import Grid from '@mui/material/Grid';
+import EditIcon from '@mui/icons-material/Edit';
+import { Link } from "react-router-dom";
+import axios from "axios";
+// ****************************************************
+
 
 //  ************* Styled Table *************
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -35,33 +44,66 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 //  ************* Styled Table *************
 
 
-const PTable = ({ columns, data }) => {
+const PTable = ({ columns, data, setPatientInfo }) => {
+  
+  const [idOfItemToDelete, setIdOfItemToDelte]  = React.useState('')
+  const [deleteSuccess, setDeleteSuccess] = React.useState(false)
+    // Delete item from table
+  React.useEffect(() => {
+    const deleteItem = async (id) => {
+      try {
+        setIdOfItemToDelte(id)
+        const result = await axios.delete(`/api/patient/${id}`)
+        setDeleteSuccess(true)
+        console.log(result.data)
+        setDeleteSuccess(false)
+        setIdOfItemToDelte("")
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    deleteItem(idOfItemToDelete);
+    
+  }, [idOfItemToDelete])
+
+
+  React.useEffect(() => {
+    setPatientInfo(deleteSuccess ? data.filter(item => item.patient !== idOfItemToDelete) : data)
+  }, [deleteSuccess])
 
   const actionButtons = (hooks) => {
     hooks.visibleColumns.push((columns) => [
       ...columns,
       {
-        id: "Edit",
-        Header: "Edit",
+        id: "modify",
+        Header: "Modify",
         Cell: ({ row }) => (
-          <Button variant="outlined" onClick={() => alert("Editing: " + row.values.id)}>
-            Edit
-          </Button>
+          
+          <Grid item xs={8}>
+                  <DeleteForeverIcon sx={{cursor: "pointer"}} onClick={() => setIdOfItemToDelte(row.values._id)}/>
+                  <EditIcon onClick={() => <Link to={`/patient/${row.values._id}/edit`} component="link" underline="hover"/>}/>
+            </Grid>
         ),
       },
     ]);
   }
 
+ 
+  // console.log(data.filter(item => item.patient !== idOfItemToDelete))
+  // console.log(deleteSuccess)
+
+
   const tableInstance = useTable(  
     {
     columns,
-    data,
+     data,
     initialState: {
-      hiddenColumns: ["createdAt", "updatedAt", "__v", "_id", "race", "patient_id"]
+      hiddenColumns: ["createdAt", "updatedAt", "__v", "race", "patient_id",]
     }
     },
     useGlobalFilter,
-    useSortBy
+    useSortBy,
+    actionButtons
   )
   const {
     getTableProps,
@@ -88,6 +130,7 @@ const PTable = ({ columns, data }) => {
     setPage(0);
   };  
   // *************************************
+
   
   return (
     <Paper sx={{ width: "100%", overflow: "hidden", margin: ".6rem" }}>

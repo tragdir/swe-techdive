@@ -8,8 +8,9 @@ import { Container, Paper } from "@mui/material";
 import { CardMedia } from "@mui/material";
 
 const PatientDetailsPage = () => {
+  const [isLoading, setIsLoading] = useState(true)
   const [examInfo, setExamInfo] = useState([]);
-  const [patientInfo, setPatientInfo] = useState([])
+  const [patientInfo, setPatientInfo] = useState([{patient: ""}])
   const { patient_id } = useParams();
  
 
@@ -18,58 +19,60 @@ const PatientDetailsPage = () => {
       try {
         const result = await axios.get(`/api/${name}/${id}`);
         const body = result.data;
-
         stateType(body);
+        setIsLoading(false)
       } catch (error) {
         console.log(error);
       }
     };
 
-    fetchData("exam", patient_id, setExamInfo);
     fetchData("patient", patient_id, setPatientInfo);
+    fetchData("exam", patient_id, setExamInfo);
+   
   }, [patient_id]);
 
-  const { key_findings, png_filename, brixia, patient } = examInfo;
-  // const spreadBrixia = brixia.join(",")
-  // console.log(spreadBrixia)
-  // const item = [patientInfo]
-  // console.log(...item)
 
-  const objKey = Object.keys(patientInfo)
+  const patientRender = () => {
+    if(!isLoading){
+      const objKey = Object.keys(patientInfo[0])
+      return objKey
+    }
+    return;
+  }
 
+  patientRender();
+ 
+
+  const objKey = Object.keys(patientInfo[0])
   return (
     <Container>
       <Paper sx={{padding: "1rem", marginBottom: "1rem"}}>
-      <h2>We will add edit button on this page</h2>
-      <h3>
-        We can add delete button here or add within the table on the main page
-        🤔
-      </h3>
-
-      <h3>Nicolas is on it!</h3>
-      <h1>  {examInfo.length}</h1>
+      <Typography  sx={{textAlign: "center"}}>
+            Patient Details
+          </Typography>
       </Paper>
       <div
         style={{
           display: "flex",
           alignContent: "center",
-          justifyContent: "space-between",
+          justifyContent: "space-around",
         }}
       >
+        {!isLoading ?
         <Card sx={{ minWidth: 275 }}>
           <Typography>
             Patient Info:
           </Typography>
           <CardContent>
-            {patientInfo && objKey.map((item, key) => {
+            {patientInfo[0] && objKey.map((item, key) => {
               return (
-                <div>
+                <div key={key}>
                     <Typography variant="h5" component="div">
                {item}
               </Typography>
               <Paper variant="outlined">
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                 {patientInfo[item]}
+                 {patientInfo[0][item]}
                 </Typography>
               </Paper>
 
@@ -78,52 +81,43 @@ const PatientDetailsPage = () => {
             })}
            
           </CardContent>
-        </Card>
-        <Card sx={{ minWidth: 300, marginLeft: "1rem"}}>
-          <Typography>Exam Info:</Typography>
-         {examInfo.length !== 0 ? <CardContent>
-            <Typography variant="h5" component="div">
-              Patient:
-            </Typography>
-            <Paper variant="outlined">
+        </Card> : <h1>No data for patient</h1>}
+
+        <Card sx={{ minWidth: 300, marginLeft: "1rem", flexDirection: 'row'}}>
+          <Typography>Exam Info:  Number of exam: #{examInfo.length}</Typography>
+          <div sx={{display: "flex", flexDirection: 'row'}}>
+          {examInfo?.map((item, index) => {
+           
+            return (
+              <div key={index}>
+              <h3>Exam #{index}</h3>
+              <Paper variant="outlined">
               <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                {patient}
+               ID: {examInfo[index].patient}
               </Typography>
-            </Paper>
-            <Typography variant="h5" component="div">
-              Radiologist Key Findings
-            </Typography>
-            <Paper variant="outlined">
               <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                {key_findings}
+               Exam Type: {examInfo[index].description}
               </Typography>
-            </Paper>
-          
-            <Typography variant="h5" component="div">
-             URL:
-            </Typography>
-            <Paper variant="outlined">
-              <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                {png_filename}
-              </Typography>
-            </Paper>
-          <Paper>
-          <CardMedia
+
+              <CardMedia
             component="img"
             sx={{ width: 300 }}
-            image={`https://ohif-hack-diversity-covid.s3.amazonaws.com/covid-png/${png_filename}`}
+            image={`https://ohif-hack-diversity-covid.s3.amazonaws.com/covid-png/${examInfo[index].image}`}
             alt="xr-image"
           />
-          </Paper>
-          <Typography variant="h5" component="div">
-             Brixia:
-            </Typography>
-            <Paper variant="outlined">
+               </Paper>
+               <Paper variant="outlined">
               <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                {brixia.join(",")}
+                Brixia: {examInfo[index].score.join(",")}
               </Typography>
             </Paper>
-          </CardContent> : <Typography>Seems like no exam information for this subject ID: {patientInfo._id}</Typography>}
+
+              </div>
+            )
+            
+          })}
+
+          </div>
         </Card>
       </div>
     </Container>
