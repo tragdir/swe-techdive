@@ -272,26 +272,17 @@ export const getFromTwoSchema = (patientName, examName) => {
 
     const allData = examsDatas.map(async exam =>{
       const patient = await patientName.findOne({_id: exam.patient});
-      //console.log("Inside allData: ");
 
       if(patient){
-        console.log(exam);
+        //console.log(exam);
         return { ...patient._doc,...exam._doc};
       }
     });
 
-  //   await allData.each(sjonObj, function(key, value){
-  //     if (value === "" || value === null){
-  //         delete sjonObj[key];
-  //     }
-  // });
+
     const items = await Promise.all(allData);
 
-
-    //console.log("All Items: ");
-
     //console.log(items);
-
     return res.status(200).json(items);
   };
 };
