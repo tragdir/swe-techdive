@@ -265,45 +265,36 @@ export const deleteItem = (PatientSchema, ExamSchema, name) => {
   };
 }
 
-export const getFromTwoSchema = (patientName, examName, name) => {
+export const getFromTwoSchema = (patientName, examName) => {
   return async (req, res) => {
 
     let examsDatas = await examName.find({});
 
-    const allData = examsDatas.map(async exam => {
+    const allData = examsDatas.map(async exam =>{
       const patient = await patientName.findOne({_id: exam.patient});
       //console.log("Inside allData: ");
-      return {...exam._doc, ...patient._doc};
+
+      if(patient){
+        console.log(exam);
+        return { ...patient._doc,...exam._doc};
+      }
     });
 
-
+  //   await allData.each(sjonObj, function(key, value){
+  //     if (value === "" || value === null){
+  //         delete sjonObj[key];
+  //     }
+  // });
     const items = await Promise.all(allData);
+
 
     //console.log("All Items: ");
 
     //console.log(items);
+
     return res.status(200).json(items);
   };
 };
-
-// export const getItemByIdFromTwoSchema = (patientName, examName, name) => {
-
-//   return async (req, res) => {
-//     let exam = await examName.find({patient: req.params.id});
-//     //console.log(examsDatas)
-
-//     const patient = await patientName.find({_id: req.params.id});
-//       //console.log(patient);
-//     var bothData = {...exam, ...patient}
-
-
-//     //console.log("All Items: ");
-
-//     console.log(bothData);
-//     return res.status(200).json(bothData);
-//   };
-// };
-
 
 
 //**FUNCTION TO INSER DATA FROM EXCEL (NO NEEDED THIS PROJECT) */
