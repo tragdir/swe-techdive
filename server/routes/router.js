@@ -30,6 +30,8 @@ router.delete('/exam/:id',  deleteItem(Patient, Exam,"exam"));
 
 //**GET BOTH DATAS */
 router.get('/data',  getFromTwoSchema(Patient, Exam));
+
+//**ONLY USED TO POPULATE SCHEMAS (NO NEEDED) */
 //router.post('/examData',  insertManyData(Exam));
 
 
