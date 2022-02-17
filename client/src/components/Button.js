@@ -1,12 +1,9 @@
 import React from "react";
 import { Button } from '@mui/material';
-import PatientTable from "../pages/PatientTable";
-
-
 
 const Buttons = (props) => {
-   
-    
+
+
     return (
         <div>
             <Button
@@ -26,6 +23,6 @@ const Buttons = (props) => {
     );
 
 }
-// const hidding = withRouter(Buttons);
+
 
 export default Buttons;

@@ -9,7 +9,6 @@ import Buttons from  './components/Button';
 ReactDOM.render(
   <React.StrictMode>
     <App />
-    <Buttons />
   </React.StrictMode>,
   document.getElementById('root')
 );

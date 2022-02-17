@@ -1,68 +1,55 @@
 import React from "react";
+import { Alert, Button, Container, TextField, Box, Grid } from "@mui/material";
+import Buttons from "../components/Button";
+
 
 const AddPatient = () => {
   return (
     <div>
-      <h1>Nice form is coming! 🐱‍🏍</h1>
-      <form id='form' method='post' action='/item' enctype='multipart/form-data'>
-            <label for='name'> Name
-            <input type='text' id='name' name='name'></input>
-            </label>
+      {/* <h1>Hi</h1> */}
 
-            <label for='age'> Age
-            <input type='age' id='age' name='age'></input>
-            </label>
+      <Grid
+        container
+        justify="center"
+        alignItems="center"
+        direction="column"
+      >
+        <Box sx={{
+          fontStyle: 'italic', fontFamily: '',
+          typography: 'h1', lineHeight: 'normal', fontSize: 200, letterSpacing: 20
+        }}>CREATE EXAM</Box>
+      </Grid>
+
+      {/* Add Patients
+      <Grid container direction="column" alignItems="left" justify="center">
+        <div><Button size="large" variant="contained" color="secondary"
+          onClick={() => <div></div>}>Add Patient</Button></div>
+      </Grid> */}
+
+      <Grid
+        container
+        justify="center"
+        alignItems="flex-start"
+        direction="column">
+        <TextField
+          id="outlined-basic"
+          label="Patient ID"
+          variant="outlined"
+        />
+        
+           <TextField
+            id="outlined-basic"
+            label="age"
+            variant="outlined"
+          />
+    
 
 
-            <label for='zip'> Zip
-            <input type='number' id='zip' name='zip'></input>
-            </label>
-
-            <p></p>
-
-            <label for='scoreA'> ZoneA
-            <input type='number' id='scoreA' name='scoreA' max='3' min='0'></input>
-            </label>
-
-            <label for='scoreB'> ZoneB
-            <input type='number' id='scoreB' name='scoreB' max='3' min='0'></input>
-            </label>
-
-            <label for='scoreC'> ZoneC
-            <input type='number' id='scoreC' name='scoreC' max='3' min='0'></input>
-            </label>
-
-            <label for='scoreD'> ZoneD
-            <input type='number' id='scoreD' name='scoreD' max='3' min='0'></input>
-            </label>
-
-            <label for='scoreE'> ZoneE
-            <input type='number' id='scoreE' name='scoreE' max='3' min='0'></input>
-            </label>
-
-            <label for='scoreF'> ZoneF
-            <input type='number' id='scoreF' name='scoreF' max='3' min='0'></input>
-            </label>
-
-            <p></p>
-
-            <label for='comment'> Information
-            <p></p>
-            <textarea id='comment' name='comment' rows="6" cols="50"></textarea>
-            </label>
-
-            <p></p>
-
-            <label for='picture'> X-Ray Image
-            <input type='file' id='picture' name='picture'></input>
-            </label>
-            <p></p>
-
-            <input type='submit' value='Add New'></input>
-        </form>
+      </Grid>
+      <Buttons />
 
     </div>
-  );
+  )
 };
 
 export default AddPatient;
