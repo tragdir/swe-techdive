@@ -19,7 +19,7 @@ const GlobalFilter = ({preGlobalFilteredRows, globalFilter, setGlobalFilter}) =>
         <Box
           sx={{
             width: "50%",
-            margin: ".6rem auto",
+            margin: ".1rem auto",
             
           }}
         >

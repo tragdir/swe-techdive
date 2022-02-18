@@ -1,8 +1,3 @@
-/* eslint-disable no-undef, arrow-body-style */
-
-//import { Exam } from "../models/exam-model.js";
-//import { Patient } from "../models/patient-model.js";
-
 export const getItems = (schemaName, name) => {
   return async (req, res) => {
     await schemaName.find({}, (err, items) => {
@@ -29,10 +24,7 @@ export const getItems = (schemaName, name) => {
     });
   }
 }
-
-
 export const getItemById = (schemaName, name) => {
-
   return async (req, res) => {
     await schemaName.find(name === "exam" ? { patient: req.params.id } : { _id: req.params.id }, (err, items) => {
       if (err) {
@@ -59,11 +51,11 @@ export const getItemById = (schemaName, name) => {
   };
 }
 
+
 export const createItem = (schemaName, name) => {
   return (req, res) => {
     const body = req.body;
     const id = req.params.id;
-
     // patient
     if (!body) {
       return res.status(400).json({
@@ -71,7 +63,6 @@ export const createItem = (schemaName, name) => {
         error: `You must provide an ${name}.`,
       });
     }
-
     let item;
     if (name === "exam") {
       item = new schemaName({
@@ -84,9 +75,6 @@ export const createItem = (schemaName, name) => {
     } else {
       item = new schemaName(body); //create new record
     }
-
-
-
     if (!item) {
       console.error(`Hack_avengers - 400 in create${name}: '${name}' is malformed.`);
       return res.status(400).json({
@@ -94,8 +82,6 @@ export const createItem = (schemaName, name) => {
         message: `'${name}' is malformed`,
       });
     }
-
-
     return item
       .save()
       .then(() => {
@@ -123,10 +109,8 @@ export const createItem = (schemaName, name) => {
       });
   };
 }
-
 export const updateItem = (schemaName, name) => {
   return async (req, res) => {
-
     const body = req.body;
     const arryOfItem = [body]
     if (!body) {
@@ -136,12 +120,9 @@ export const updateItem = (schemaName, name) => {
         error: `You must provide ${name} to update.`,
       });
     }
-
     const itemForUpdate = { ...arryOfItem }[0]
-
-
     try {
-      await schemaName.findOneAndUpdate(name === "exam" ? { patient: req.params.id } : { _id: req.params.id }, itemForUpdate);
+      await schemaName.findOneAndUpdate(name === "exam" ? { _id: req.params.id } : { _id: req.params.id }, itemForUpdate);
     } catch (err) {
       console.error(`Hack_avengers - caught error in 'update${name}': ${err}`);
       console.error(err);
@@ -150,7 +131,6 @@ export const updateItem = (schemaName, name) => {
         error: err,
       });
     }
-
     console.log(`Hack_avengers - 200 in 'update${name}': ${name} updated!`);
     return res.status(200).json({
       success: true,
@@ -159,7 +139,6 @@ export const updateItem = (schemaName, name) => {
     });
   };
 }
-
 export const deleteItem = (PatientSchema, ExamSchema, name) => {
   return async (req, res) => {
     const oneExam = await ExamSchema.findOne({ patient: req.params.id });
@@ -219,6 +198,7 @@ export const deleteItem = (PatientSchema, ExamSchema, name) => {
                 error: `exam data not found!`,
               });
             }
+
   
             return (
               // res.setHeader('Content-Type', 'application/json'),
@@ -234,7 +214,7 @@ export const deleteItem = (PatientSchema, ExamSchema, name) => {
     } else {
 
       // delete only from exam schema
-      await ExamSchema.findOneAndDelete({ patient: req.params.id }, (err, item) => {
+      await ExamSchema.findOneAndDelete({ _id: req.params.id }, (err, item) => {
         if (err) {
           console.error(`Hack_avengers - 400 in 'delete${name}': ${err}`);
           return res.status(400).json({
@@ -264,41 +244,18 @@ export const deleteItem = (PatientSchema, ExamSchema, name) => {
     }
   };
 }
-
-export const getFromTwoSchema = (patientName, examName, name) => {
+export const getFromTwoSchema = (patientName, examName) => {
   return async (req, res) => {
-
     let examsDatas = await examName.find({});
-
-    const allData = examsDatas.map(async exam => {
-      const patient = await patientName.find({_id: exam.patient});
-      // console.log(patient)
-      // console.log(exam)
-      // console.log(patient.concat(exam))
-      return patient.concat(exam);
+    const allData = examsDatas.map(async exam =>{
+      const patient = await patientName.findOne({_id: exam.patient});
+      if(patient){
+        //console.log(exam);
+        return { ...patient._doc,...exam._doc};
+      }
     });
-
     const items = await Promise.all(allData);
-    // console.log(items)
-   const file = items.map(item => item).map(stuff => stuff).reduce((accumulator, item) => {
-    return [{...accumulator, ...item}];
-  }, []);
-  //   const newItem = items.map(item => item)
-  //   //  console.log(...newItem)
-  //  const file = [...newItem]
-
-  //   console.log(...items)
-    // let merged = {...items}
-
-    // let merged = {};
-    // file.map(item => merged={...merged, ...item})
-    console.log(file)
-
-    // const result = file.reduce((accumulator, item) => {
-    //   return [{...accumulator, ...item}];
-    // }, []);
-    // console.log(result)
-
-    return res.status(200).json(file);
+    //console.log(items);
+    return res.status(200).json(items);
   };
 };

@@ -8,24 +8,21 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { styled } from '@mui/material/styles';
-import { useTable, useGlobalFilter, useSortBy} from "react-table";
-import GlobalFilter from "./GlobalFilter";
 
-// ******************************************************
-import Button from '@mui/material/Button';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import Grid from '@mui/material/Grid';
-import EditIcon from '@mui/icons-material/Edit';
-import { Link } from "react-router-dom";
-import axios from "axios";
-// ****************************************************
 
 
 //  ************* Styled Table *************
+
+const Root = styled('div')`
+  th {
+    background-color: #ddd;
+  }
+`
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
+   
+    color: theme.palette.common.black,
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -44,96 +41,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 //  ************* Styled Table *************
 
 
-const PTable = ({ columns, data, setPatientInfo }) => {
+const MainTable = ({ columns, data, tableInstance}) => {
   
-  const [idOfItemToDelete, setIdOfItemToDelte]  = React.useState('')
-  const [deleteSuccess, setDeleteSuccess] = React.useState(false)
-    // Delete item from table
-  //   const isMounted = React.useRef(true);
-
-
-  //   const deleteItem = async (id) => {
-  //     try {
-  //       if(isMounted.current) {
-  //         setIdOfItemToDelte(id)
-  //         const result = await axios.delete(`/api/patient/${id}`)
-  //         setDeleteSuccess(true)
-  //         console.log(result.data)
-  //         setIdOfItemToDelte("")
-  //       }
-  //     } catch (error) {
-  //       console.log(error)
-  //       setDeleteSuccess(false)
-  //     }
-  //   }
-
-  //   React.useEffect(() => {
-  //     if(isMounted.current){
-  //       deleteItem(idOfItemToDelete)
-  // }
-  //     return ()=> {isMounted.current = false}
-  //   }, []);
-
-  React.useEffect(() => {
-    const deleteItem = async (id) => {
-      try {
-        if(idOfItemToDelete !== '') {
-          const result = await axios.delete(`/api/patient/${id}`)
-          setDeleteSuccess(true)
-          console.log(result.data)
-          setIdOfItemToDelte("")
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    // setDeleteSuccess(false)
-    deleteItem(idOfItemToDelete);
-    
-  }, [idOfItemToDelete, deleteSuccess])
-  
-// console.log(deleteSuccess)
-// console.log(idOfItemToDelete)
-
-  React.useEffect(() => {
-    setPatientInfo(deleteSuccess ? data.filter(item => item._id !== idOfItemToDelete) : data)
-    // setDeleteSuccess(false)
-  }, [deleteSuccess, idOfItemToDelete])
-
-  const actionButtons = (hooks) => {
-    hooks.visibleColumns.push((columns) => [
-      ...columns,
-      {
-        id: "modify",
-        Header: "Modify",
-        Cell: ({ row }) => (
-          
-          <Grid item xs={8}>
-                  <DeleteForeverIcon sx={{cursor: "pointer"}} onClick={() => setIdOfItemToDelte(row.values._id)}/>
-                  <EditIcon onClick={() => <Link to={`/patient/${row.values._id}/edit`} component="link" underline="hover"/>}/>
-            </Grid>
-        ),
-      },
-    ]);
-  }
-
- 
-  // console.log(data.filter(item => item.patient !== idOfItemToDelete))
-  // console.log(deleteSuccess)
-
-
-  const tableInstance = useTable(  
-    {
-    columns,
-     data,
-    initialState: {
-      hiddenColumns: ["createdAt", "updatedAt", "__v", "race", "patient_id",]
-    }
-    },
-    useGlobalFilter,
-    useSortBy,
-    actionButtons
-  )
   const {
     getTableProps,
     getTableBodyProps,
@@ -144,6 +53,7 @@ const PTable = ({ columns, data, setPatientInfo }) => {
     setGlobalFilter,
     state,
   } = tableInstance;
+  
 
   // Render the UI for your table
   // Material UI
@@ -162,10 +72,10 @@ const PTable = ({ columns, data, setPatientInfo }) => {
 
   
   return (
+   
     <Paper sx={{ width: "100%", overflow: "hidden", margin: ".6rem" }}>
       <TableContainer sx={{ maxHeight: 600 }}>
-        <GlobalFilter preGlobalFilteredRows={preGlobalFilteredRows} 
-        setGlobalFilter={setGlobalFilter} globalFilter={state.globalFilter}/>
+      <Root>
         <Table {...getTableProps()} stickyHeader aria-label="sticky table">
           <TableHead>
             {headerGroups.map((headerGroup) => (
@@ -201,6 +111,7 @@ const PTable = ({ columns, data, setPatientInfo }) => {
               })}
           </TableBody>
         </Table>
+        </Root>
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
@@ -211,8 +122,10 @@ const PTable = ({ columns, data, setPatientInfo }) => {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+      
     </Paper>
+
   );
 };
 
-export default PTable;
+export default MainTable;

@@ -28,7 +28,7 @@ router.put('/exam/:id',  updateItem(Exam, "exam"));
 router.delete('/exam/:id',  deleteItem(Patient, Exam,"exam"));
 
 //**GET BOTH DATAS */
-router.get('/data',  getFromTwoSchema(Patient, Exam, "exams"));
+router.get('/data',  getFromTwoSchema(Patient, Exam));
 
 
 // module.exports = router;

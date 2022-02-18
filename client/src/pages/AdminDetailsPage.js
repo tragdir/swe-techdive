@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { Button, Container, Paper } from "@mui/material";
-import { CardMedia, Box } from "@mui/material";
+import { Box, Button, Container, Paper } from "@mui/material";
+import { CardMedia } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -16,15 +18,30 @@ import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Skeleton from '@mui/material/Skeleton';
 import Chip from '@mui/material/Chip';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Snackbar from '@mui/material/Snackbar';
+import { Alert } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import FormInput from "../components/controls/FormInput";
+import Popup from "../components/Popup";
+import MenuPopupState from "../components/controls/MenuPopupState";
 
 
-const PatientDetailsPage = () => {
+const AdminDetailsPage = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [examInfo, setExamInfo] = useState([]);
   const [patientInfo, setPatientInfo] = useState([{patient: ""}])
   const { patient_id } = useParams();
+  const [examId, setExamId] = useState('')
+  const [singleExam, setSingleExam] = useState([]);
+  const [openPopup, setOpenPopup] = useState(false)
+  const [deleteStatus, setDeleteStatus] = useState(false)
 
+
+    const [state, setState] = useState({
+      open: false,
+      vertical: 'top',
+      horizontal: 'center',
+    });
 
 
   useEffect(() => {
@@ -44,6 +61,10 @@ const PatientDetailsPage = () => {
    
   }, [patient_id]);
 
+  function handleClick(index){
+    setSingleExam(examInfo[index]);
+    setOpenPopup(true);
+ }
 
   const patientRender = () => {
     if(!isLoading){
@@ -57,12 +78,32 @@ const PatientDetailsPage = () => {
   patientRender();
 
 // Reload page
-// function refreshPage() {
-//   window.location.reload();
-// }
+function refreshPage() {
+  window.location.reload();
+}
 
+
+  React.useEffect(() => {
+    const deleteItem = async (id) => {
+      try {
+        if(examId !== '') {
+          const result = await axios.delete(`/api/exam/${id}`)
+          console.log(result.data)
+          setState({ open: true });
+          setExamId("")
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    deleteItem(examId);
+    
+  }, [examId, state.open]);
   
- 
+  // Snack bar handler
+  const handleClose = () => {
+    setState({ ...state, open: false });
+  };
   // Birixia color control
   function getColor(item){
     if (item === 0) { return "success"}
@@ -72,16 +113,23 @@ const PatientDetailsPage = () => {
   }
  
   const objKey = Object.keys(patientInfo[0])
- 
   return (
   <Container>
+    <Snackbar open={state.open} autoHideDuration={6000} onClose={handleClose}>
+      <Alert onClose={handleClose} severity="success">
+          Delete successful!
+      </Alert>
+    </Snackbar>
+    <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} btnName='Update' title="Editing exam">
+        <FormInput singleExam={singleExam}/>
+      </Popup>
       <Paper sx={{padding: "1rem", marginBottom: "1rem"}}>
-        <Link to={'/'} style={{ textDecoration: 'none' }}>
+      <Link to={'/admin'} style={{ textDecoration: 'none' }}>
         <Button>
-        <ArrowBackIcon/> Back
+        <ArrowBackIcon/> Admin Table
         </Button>
         </Link>
-      <Typography  sx={{textAlign: "center", marginTop: "-1rem"}}>
+      <Typography  sx={{textAlign: "center"}}>
             Patient Details
           </Typography>
       </Paper>
@@ -94,10 +142,18 @@ const PatientDetailsPage = () => {
       >
         {!isLoading ?
         <Card sx={{ minWidth: 275 }}>
-          <div>
-          <AccountCircle sx={{ marginBottom: '-5px'}}/> Patient Info:
-          <Divider />
+          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+          <div><Typography variant="h6"><AccountCircle sx={{ marginBottom: '-5px'}}/> Patient Info:</Typography></div>
+          {/* <Box>
+          <Button onClick={() => {}}>
+                     <EditIcon sx={{cursor: "pointer", color: "yellowgreen"}}/>
+            </Button>
+            <Button onClick={() => {}}><DeleteForeverIcon sx={{color: "red"}}/></Button>
+            </Box> */}
+            {/* state, setState, deleteId */}
+            <MenuPopupState state={state} setState={setState} id={patientInfo[0]._id}/>
           </div>
+          <Divider />
           <CardContent>
             
       <List
@@ -117,7 +173,7 @@ const PatientDetailsPage = () => {
           </Avatar>
         </ListItemAvatar>
         <ListItemText primary={item.replace(/(?:_| |\b)(\w)/g, function(str, p1) { return p1.toUpperCase()})} 
-        secondary={(item === 'createdAt' || item === "updatedAt") ? new Date(patientInfo[0][item]).toLocaleString(): patientInfo[0][item]} />
+        secondary={(item === 'createdAt' || item === "updatedAt") ? new Date(patientInfo[0][item]).toLocaleString(): patientInfo[0][item]}/>
       </ListItem>
       <Divider variant="inset" component="li" />
 
@@ -130,14 +186,18 @@ const PatientDetailsPage = () => {
         </Card> : <h1>No patient data</h1>}
 
         <Card sx={{ marginLeft: "1rem", flexDirection: 'row'}}>
-          <Typography variant='h5'>Exam Info: {examInfo.length} exam(s)</Typography>
+          <Typography variant="h6">Exam Info: {examInfo.length} exam(s)</Typography>
           <Divider />
           <div sx={{display: "flex", flexDirection: 'row'}}>
           {examInfo?.map((item, index) => {
            
             return (
               <div key={index}>
-              <h4>Exam #{index + 1}</h4>
+                 <Button onClick={() => handleClick(index)}>
+                     <EditIcon sx={{cursor: "pointer", color: "yellowgreen"}}/>
+                 </Button>
+                 <Button onClick={() => setExamId(examInfo[index]._id)}><DeleteForeverIcon sx={{color: "red"}}/></Button>
+              <h3>Exam #{index + 1}</h3>
               <Paper variant="outlined">
               <Typography sx={{ mb: 1.5 }}  color="text.secondary">
                ID: {examInfo[index].patient}
@@ -162,7 +222,7 @@ const PatientDetailsPage = () => {
                   <Chip key={key} label={item} color={getColor(item)} />
                  )
                })}
-                </Stack>
+            </Stack>
                 <Box>
                 <Typography sx={{ mt: 1.5}} variant="caption">
                 Created: {new Date(examInfo[index].createdAt).toLocaleString()}
@@ -185,4 +245,4 @@ const PatientDetailsPage = () => {
   );
 };
 
-export default PatientDetailsPage;
+export default AdminDetailsPage;

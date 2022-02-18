@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
-export default function EditPage({singleExam}) {
+export default function FormInput({singleExam}) {
   const [value, setValue] = React.useState('Controlled');
 
   const handleChange = (event) => {
