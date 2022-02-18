@@ -18,6 +18,10 @@ export default function Header() {
     color: "white",
   };
 
+  // function refreshPage() {
+  //   window.location.reload();
+  // }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" style={{ marginBottom: "1rem" }}>
@@ -29,6 +33,7 @@ export default function Header() {
               color="inherit"
               aria-label="open drawer"
               sx={{ mr: 2 }}
+              // onClick={ refreshPage }
             >
               <CoronavirusIcon />
             </IconButton>
@@ -39,22 +44,8 @@ export default function Header() {
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
           >
-            COVID-19 Radiology
+            COVID-19 Radiology Report
           </Typography>
-          {/* 00000000000000000000000000000000000000000000000000000000000000000000 */}
-          {/* <Box sx={{marginLeft: "2rem"}} >
-            <Link to={"/admin"} style={linkStyle}>
-              <Button
-                variant="outlined"
-                size="large"
-                edge="end"
-                color="inherit"
-              >
-                Admin &nbsp;
-              </Button>
-            </Link>
-          </Box> */}
-          {/* 9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999 */}
 
           <Box sx={{ flexGrow: 1 }} />
           <Box
@@ -71,8 +62,9 @@ export default function Header() {
                 size="large"
                 edge="end"
                 color="inherit"
+                // onClick={ refreshPage }
               >
-                Add Data &nbsp;
+                Admin &nbsp;
                 <AccountCircle />
               </Button>
             </Link>

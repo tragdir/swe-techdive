@@ -8,14 +8,21 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { styled } from '@mui/material/styles';
-import { useTable, useGlobalFilter} from "react-table";
-import GlobalFilter from "./GlobalFilter";
+
+
 
 //  ************* Styled Table *************
+
+const Root = styled('div')`
+  th {
+    background-color: #ddd;
+  }
+`
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
+   
+    color: theme.palette.common.black,
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -34,27 +41,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 //  ************* Styled Table *************
 
 
-const PTable = ({ columns, data }) => {
-  // Use the state and functions returned from useTable to build your UI
-  // const { getTableProps, headerGroups, rows, prepareRow, preGlobalFilteredRows, setGlobalFilter, state } = useTable({
-  //   columns,
-  //   data,
-  //   useGlobalFilter,
-  //   initialState: {
-  //     hiddenColumns: ["createdAt", "updatedAt", "__v", "_id", "race", "patient_id"]
-  //   }
-  // });
-
-  const tableInstance = useTable(  
-    {
-    columns,
-    data,
-    initialState: {
-      hiddenColumns: ["createdAt", "updatedAt", "__v", "_id", "race", "patient_id"]
-    }
-    },
-    useGlobalFilter,
-  )
+const MainTable = ({ columns, data, tableInstance}) => {
+  
   const {
     getTableProps,
     getTableBodyProps,
@@ -65,6 +53,7 @@ const PTable = ({ columns, data }) => {
     setGlobalFilter,
     state,
   } = tableInstance;
+  
 
   // Render the UI for your table
   // Material UI
@@ -80,12 +69,13 @@ const PTable = ({ columns, data }) => {
     setPage(0);
   };  
   // *************************************
+
   
   return (
+   
     <Paper sx={{ width: "100%", overflow: "hidden", margin: ".6rem" }}>
       <TableContainer sx={{ maxHeight: 600 }}>
-        <GlobalFilter preGlobalFilteredRows={preGlobalFilteredRows} 
-        setGlobalFilter={setGlobalFilter} globalFilter={state.globalFilter}/>
+      <Root>
         <Table {...getTableProps()} stickyHeader aria-label="sticky table">
           <TableHead>
             {headerGroups.map((headerGroup) => (
@@ -93,9 +83,10 @@ const PTable = ({ columns, data }) => {
                 {headerGroup.headers.map((column) => (
                   <StyledTableCell
                     style={{ minWidth: "170" }}
-                    {...column.getHeaderProps()}
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
                   >
                     {column.render("Header")}
+                    {column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼"): ""}
                   </StyledTableCell>
                 ))}
               </TableRow>
@@ -120,6 +111,7 @@ const PTable = ({ columns, data }) => {
               })}
           </TableBody>
         </Table>
+        </Root>
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
@@ -130,8 +122,10 @@ const PTable = ({ columns, data }) => {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+      
     </Paper>
+
   );
 };
 
-export default PTable;
+export default MainTable;

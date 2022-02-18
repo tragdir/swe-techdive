@@ -25,3 +25,4 @@ app.get("/patient/:patient_id", (req, res) => {
 app.listen(PORT, () => {
   console.log("App listenig on port: " + PORT);
 });
+

@@ -1,8 +1,3 @@
-/* eslint-disable no-undef, arrow-body-style */
-
-//import { Exam } from "../models/exam-model.js";
-//import { Patient } from "../models/patient-model.js";
-
 export const getItems = (schemaName, name) => {
   return async (req, res) => {
     await schemaName.find({}, (err, items) => {
@@ -18,7 +13,6 @@ export const getItems = (schemaName, name) => {
         return res.status(200).json([]);
       }
       console.log(`Fetching successful!`);
-      console.log(items)
       return res.status(200).json(items);
     }).catch(err => {
       console.error(`Error fetching the data': ${err}`);
@@ -30,10 +24,7 @@ export const getItems = (schemaName, name) => {
     });
   }
 }
-
-
 export const getItemById = (schemaName, name) => {
-
   return async (req, res) => {
     await schemaName.find(name === "exam" ? { patient: req.params.id } : { _id: req.params.id }, (err, items) => {
       if (err) {
@@ -60,11 +51,11 @@ export const getItemById = (schemaName, name) => {
   };
 }
 
+
 export const createItem = (schemaName, name) => {
   return (req, res) => {
     const body = req.body;
     const id = req.params.id;
-
     // patient
     if (!body) {
       return res.status(400).json({
@@ -72,7 +63,6 @@ export const createItem = (schemaName, name) => {
         error: `You must provide an ${name}.`,
       });
     }
-
     let item;
     if (name === "exam") {
       item = new schemaName({
@@ -82,13 +72,9 @@ export const createItem = (schemaName, name) => {
         keyFindings: body.keyFindings,
         patient: id
       }); //create new record for exam
-      console.log(item)
     } else {
       item = new schemaName(body); //create new record
     }
-
-
-
     if (!item) {
       console.error(`Hack_avengers - 400 in create${name}: '${name}' is malformed.`);
       return res.status(400).json({
@@ -96,8 +82,6 @@ export const createItem = (schemaName, name) => {
         message: `'${name}' is malformed`,
       });
     }
-
-
     return item
       .save()
       .then(() => {
@@ -125,10 +109,8 @@ export const createItem = (schemaName, name) => {
       });
   };
 }
-
 export const updateItem = (schemaName, name) => {
   return async (req, res) => {
-
     const body = req.body;
     const arryOfItem = [body]
     if (!body) {
@@ -138,12 +120,9 @@ export const updateItem = (schemaName, name) => {
         error: `You must provide ${name} to update.`,
       });
     }
-
     const itemForUpdate = { ...arryOfItem }[0]
-
-
     try {
-      await schemaName.findOneAndUpdate(name === "exam" ? { patient: req.params.id } : { _id: req.params.id }, itemForUpdate);
+      await schemaName.findOneAndUpdate(name === "exam" ? { _id: req.params.id } : { _id: req.params.id }, itemForUpdate);
     } catch (err) {
       console.error(`Hack_avengers - caught error in 'update${name}': ${err}`);
       console.error(err);
@@ -152,7 +131,6 @@ export const updateItem = (schemaName, name) => {
         error: err,
       });
     }
-
     console.log(`Hack_avengers - 200 in 'update${name}': ${name} updated!`);
     return res.status(200).json({
       success: true,
@@ -161,9 +139,9 @@ export const updateItem = (schemaName, name) => {
     });
   };
 }
-
 export const deleteItem = (PatientSchema, ExamSchema, name) => {
   return async (req, res) => {
+    const oneExam = await ExamSchema.findOne({ patient: req.params.id });
     // delete from both patient and exam
     if (name === "patient") {
       //** DELETING FROM PATIENT SCHEMA*/
@@ -184,10 +162,13 @@ export const deleteItem = (PatientSchema, ExamSchema, name) => {
           });
         }
 
-        // return res.status(200).json({
-        //   success: true,
-        //   item: item,
-        // });
+        if(!oneExam){
+          return res.status(200).json({
+            success: true,
+            // item: item,
+          });
+        }
+        
       }).catch(err => {
         console.error(`Hack_avengers - caught error in 'delete${name}': ${err}`);
         console.error(err);
@@ -196,37 +177,44 @@ export const deleteItem = (PatientSchema, ExamSchema, name) => {
       //if (deletedPatient.Exam) {
 
       //** DELETING FROM EXAM SCHEMA*/
-        await ExamSchema.deleteOne({ patient: req.params.id }, (err, item) => {
-          if (err) {
-            console.error(`Hack_avengers - 400 in 'delete exam': ${err}`);
-            return res.status(400).json({
-              succes: false,
-              error: err,
-            });
-          }
 
-          if (!item) {
-            console.error(`Hack_avengers - 400 in 'delete${name}': ${name} not found!`);
-            return res.status(400).json({
-              success: false,
-              error: `exam data not found!`,
-            });
-          }
 
-          return res.status(200).json({
-            success: true,
-            item: item,
+        if(!oneExam){
+          return;
+        } else {
+          await ExamSchema.deleteOne({ patient: req.params.id }, (err, item) => {
+            if (err) {
+              console.error(`Hack_avengers - 400 in 'delete exam': ${err}`);
+              return res.status(400).json({
+                succes: false,
+                error: err,
+              });
+            }
+  
+            if (!item) {
+              console.error(`Hack_avengers - 400 in 'delete${name}': ${name} not found!`);
+              return res.status(400).json({
+                success: false,
+                error: `exam data not found!`,
+              });
+            }
+
+  
+            return (
+              // res.setHeader('Content-Type', 'application/json'),
+              res.status(200).json({
+              success: true,
+            }));
+          }).catch(err => {
+            console.error(`Hack_avengers - caught error in 'delete${name}': ${err}`);
+            console.error(err);
+            return err;
           });
-        }).catch(err => {
-          console.error(`Hack_avengers - caught error in 'delete${name}': ${err}`);
-          console.error(err);
-          return err;
-        });
-      //}
+        }
     } else {
 
       // delete only from exam schema
-      await ExamSchema.findOneAndDelete({ patient: req.params.id }, (err, item) => {
+      await ExamSchema.findOneAndDelete({ _id: req.params.id }, (err, item) => {
         if (err) {
           console.error(`Hack_avengers - 400 in 'delete${name}': ${err}`);
           return res.status(400).json({
@@ -243,10 +231,10 @@ export const deleteItem = (PatientSchema, ExamSchema, name) => {
           });
         }
 
-        return res.status(200).json({
+        return (
+        res.status(200).json({
           success: true,
-          item: item,
-        });
+        }));
       }).catch(err => {
         console.error(`Hack_avengers - caught error in 'delete${name}': ${err}`);
         console.error(err);
@@ -256,220 +244,18 @@ export const deleteItem = (PatientSchema, ExamSchema, name) => {
     }
   };
 }
-
-export const getFromTwoSchema = (patientName, examName, name) => {
+export const getFromTwoSchema = (patientName, examName) => {
   return async (req, res) => {
-
     let examsDatas = await examName.find({});
-
-    const allData = examsDatas.map(async exam => {
-      const patient = await patientName.find({_id: exam.patient});
-      console.log("Inside allData: ");
-      console.log(patient[0]);
-      return {...exam._doc, ...patient};
+    const allData = examsDatas.map(async exam =>{
+      const patient = await patientName.findOne({_id: exam.patient});
+      if(patient){
+        //console.log(exam);
+        return { ...patient._doc,...exam._doc};
+      }
     });
-
-
     const items = await Promise.all(allData);
-
-    console.log("All Items: ");
-
-    console.log(items);
+    //console.log(items);
     return res.status(200).json(items);
   };
 };
-
-//**FUNCTION TO INSER DATA FROM EXCEL (NO NEEDED THIS PROJECT) */
-// export const insertManyData = (schemaName)=>{
-//   return async (req, res)=>{
-//     await schemaName.insertMany([
-//       {
-//         "description": "XR CHEST AP PORTABLE",
-//         "key_findings": "Subtle patchy bibasilar and right upper lobe airspace  opacities",
-//         "image": "COVID-19-AR-16434409_XR_CHEST_AP_PORTABLE_1.png",
-//         "patient": "6205576aaa478f466cca3809",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST AP PORTABLE",
-//         "key_findings": "Streaky opacities in bilateral mid and left lower lung.  Patchy opacities  in the right lower lung.  No pleural effusion.  ",
-//         "image": "COVID-19-AR-16434381_XR_CHEST_AP_PORTABLE_2.png",
-//         "patient": "6205576aaa478f466cca380b",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST AP ONLY",
-//         "key_findings": "Lung volumes remain low but there appears to have been clearing since  prior radiograph",
-//         "image": "COVID-19-AR-16434381_XR_CHEST_AP_ONLY_1.png",
-//         "patient": "6205576aaa478f466cca380c",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST PA AND LATERAL",
-//         "key_findings": " patchy increased opacity in the lower lobes bilaterally, more pronounced on the lateral view.  Small pleural effusions ",
-//         "image": "COVID-19-AR-16406513_XR_CHEST_PA_AND_LATERAL_2.png",
-//         "patient_id": "6205576aaa478f466cca380d",
-//         "score": randomBrixia()
-
-//     },
-//     {
-//         "description": "XR CHEST AP PORTABLE",
-//         "key_findings": "Patchy, airspace opacities are seen within the bilateral lower lungs, predominantly left-sided.  Haziness of the left costophrenic angle.  ",
-//         "image": "COVID-19-AR-16406513_XR_CHEST_AP_PORTABLE_3.png",
-//         "patient": "6205576aaa478f466cca380d",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST AP PORTABLE",
-//         "key_findings": "No relevant findings",
-//         "image": "COVID-19-AR-16439216_XR_CHEST_AP_PORTABLE_3.png",
-//         "patient": "6205576aaa478f466cca380e",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST AP PORTABLE",
-//         "key_findings": "Interval development of patchy areas of consolidation predominately in  the lung bases suspicious for infection.",
-//         "image": "COVID-19-AR-16439216_XR_CHEST_AP_PORTABLE_3.png",
-//         "patient": "6205576aaa478f466cca380f",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST AP PORTABLE",
-//         "key_findings": "There has been development of bilateral lower lobe airspace disease  consistent with multilobar pneumonia",
-//         "image": "COVID-19-AR-16406491_XR_CHEST_AP_PORTABLE_1.png",
-//         "patient": "6205576aaa478f466cca3810",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST AP PORTABLE",
-//         "key_findings": "Patchy ground-glass opacities in the left lung and in the right lower  lobe which may be infectious in etiology",
-//         "image": "COVID-19-AR-16406496_XR_CHEST_AP_PORTABLE_1.png",
-//         "patient": "6205576aaa478f466cca3811",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST AP ONLY",
-//         "key_findings": "Patchy ground-glass  changes are seen within the left lung and in the right lower lung not  significantly changed compared to the prior study.",
-//         "image": "COVID-19-AR-16406496_XR_CHEST_AP_ONLY_3.png",
-//         "patient": "6205576aaa478f466cca3812",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST AP ONLY",
-//         "key_findings": "Bilateral patchy airspace disease involving both mid and lower lung zones, left worse than the right. ",
-//         "image": "COVID-19-AR-16424082_XR_CHEST_AP_ONLY_3.png",
-//         "patient": "6205576aaa478f466cca3813",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST AP PORTABLE",
-//         "key_findings": "significant worsening of airspace disease, now very extensive and patchy sparing only apices.",
-//         "image": "COVID-19-AR-16424082_XR_CHEST_AP_PORTABLE_2.png",
-//         "patient": "6205576aaa478f466cca3814",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST AP PORTABLE",
-//         "key_findings": "significant worsening of bilateral patchy airspace changes involving all lung zones with relative sparing of both lung apices.",
-//         "image": "COVID-19-AR-16424082_XR_CHEST_AP_PORTABLE_2.png",
-//         "patient": "6205576aaa478f466cca3815",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST AP PORTABLE",
-//         "key_findings": "Bibasilar opacities are seen most pronounced on the left.  No large pleural effusion identified. ",
-//         "image": "COVID-19-AR-16406504_XR_CHEST_AP_PORTABLE_2.png",
-//         "patient": "6205576aaa478f466cca3816",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST AP ONLY",
-//         "key_findings": "Left lower lobe airspace  disease is seen.",
-//         "image": "COVID-19-AR-16406504_XR_CHEST_AP_ONLY_1.png",
-//         "patient": "6205576aaa478f466cca3817",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST AP PORTABLE",
-//         "key_findings": "subtle peribronchovascular opacities are noted within both lung bases.  There is somewhat bandlike opacity seen in the region of the lateral right upper lung.  ",
-//         "image": "COVID-19-AR-16434350_XR_CHEST_AP_PORTABLE_1.png",
-//         "patient": "6205576aaa478f466cca3818",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST PA AND LATERAL",
-//         "key_findings": "No pleural effusions. ",
-//         "image": "COVID-19-AR-16406502_XR_CHEST_PA_AND_LATERAL_4.png",
-//         "patient": "6205576aaa478f466cca3819",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST AP ONLY",
-//         "key_findings": "Low lung volumes with minimal bibasilar subsegmental atelectasis. ",
-//         "image": "COVID-19-AR-16406502_XR_CHEST_AP_ONLY_2.png",
-//         "patient": "6205576aaa478f466cca381a",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST AP PORTABLE",
-//         "key_findings": "Lung volumes remain low but lungs are clear",
-//         "image": "COVID-19-AR-16406502_XR_CHEST_AP_PORTABLE_5.png",
-//         "patient": "6205576aaa478f466cca381b",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST AP PORTABLE",
-//         "key_findings": "The lungs  are clear and without focal consolidation. ",
-//         "image": "COVID-19-AR-16406502_XR_CHEST_AP_PORTABLE_5.png",
-//         "patient": "6205576aaa478f466cca381c",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST AP PORTABLE",
-//         "key_findings": "Bibasilar airspace opacities ",
-//         "image": "COVID-19-AR-16406494_XR_CHEST_AP_PORTABLE_2.png",
-//         "patient": "6205576aaa478f466cca381b",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST AP PORTABLE",
-//         "key_findings": "Worsening bilateral  airspace disease is seen within the lower lobes",
-//         "image": "COVID-19-AR-16406494_XR_CHEST_AP_PORTABLE_2.png",
-//         "patient": "6205576aaa478f466cca3819",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST AP PORTABLE",
-//         "key_findings": "No significant airspace consolidation bilaterally",
-//         "image": "COVID-19-AR-16424105_XR_CHEST_AP_PORTABLE_2.png",
-//         "patient": "6205576aaa478f466cca3817",
-//         "score": randomBrixia()
-//     },
-//     {
-//         "description": "XR CHEST PA AND LATERAL",
-//         "key_findings": " Lungs are clear, no nodule, airspace disease or pleural  effusion.",
-//         "image": "COVID-19-AR-16424105_XR_CHEST_PA_AND_LATERAL_4.png",
-//         "patient": "6205576aaa478f466cca381c",
-//         "score": randomBrixia()
-//     },
-//     ])
-
-//     res.send("Data inserted succesfully");
-
-//   };
-// };
-
-// let randomInt = function(){
-//   return Math.floor(Math.random() * (4));
-// };
-
-// let randomBrixia = function (){
-//   let myArray = new Array(6);
-
-//   for(let i = 0; i < myArray.length; i++){
-//     myArray[i] = randomInt();
-//   };
-
-//   return myArray;
-
-// };
