@@ -1,8 +1,3 @@
-/* eslint-disable no-undef, arrow-body-style */
-
-//import { Exam } from "../models/exam-model.js";
-//import { Patient } from "../models/patient-model.js";
-
 export const getItems = (schemaName, name) => {
   return async (req, res) => {
     await schemaName.find({}, (err, items) => {
@@ -18,7 +13,6 @@ export const getItems = (schemaName, name) => {
         return res.status(200).json([]);
       }
       console.log(`Fetching successful!`);
-      console.log(items)
       return res.status(200).json(items);
     }).catch(err => {
       console.error(`Error fetching the data': ${err}`);
@@ -30,10 +24,7 @@ export const getItems = (schemaName, name) => {
     });
   }
 }
-
-
 export const getItemById = (schemaName, name) => {
-
   return async (req, res) => {
     await schemaName.find(name === "exam" ? { patient: req.params.id } : { _id: req.params.id }, (err, items) => {
       if (err) {
@@ -60,11 +51,11 @@ export const getItemById = (schemaName, name) => {
   };
 }
 
+
 export const createItem = (schemaName, name) => {
   return (req, res) => {
     const body = req.body;
     const id = req.params.id;
-
     // patient
     if (!body) {
       return res.status(400).json({
@@ -72,7 +63,6 @@ export const createItem = (schemaName, name) => {
         error: `You must provide an ${name}.`,
       });
     }
-
     let item;
     if (name === "exam") {
       item = new schemaName({
@@ -82,13 +72,9 @@ export const createItem = (schemaName, name) => {
         keyFindings: body.keyFindings,
         patient: id
       }); //create new record for exam
-      console.log(item)
     } else {
       item = new schemaName(body); //create new record
     }
-
-
-
     if (!item) {
       console.error(`Hack_avengers - 400 in create${name}: '${name}' is malformed.`);
       return res.status(400).json({
@@ -96,8 +82,6 @@ export const createItem = (schemaName, name) => {
         message: `'${name}' is malformed`,
       });
     }
-
-
     return item
       .save()
       .then(() => {
@@ -125,10 +109,8 @@ export const createItem = (schemaName, name) => {
       });
   };
 }
-
 export const updateItem = (schemaName, name) => {
   return async (req, res) => {
-
     const body = req.body;
     const arryOfItem = [body]
     if (!body) {
@@ -138,12 +120,9 @@ export const updateItem = (schemaName, name) => {
         error: `You must provide ${name} to update.`,
       });
     }
-
     const itemForUpdate = { ...arryOfItem }[0]
-
-
     try {
-      await schemaName.findOneAndUpdate(name === "exam" ? { patient: req.params.id } : { _id: req.params.id }, itemForUpdate);
+      await schemaName.findOneAndUpdate(name === "exam" ? { _id: req.params.id } : { _id: req.params.id }, itemForUpdate);
     } catch (err) {
       console.error(`Hack_avengers - caught error in 'update${name}': ${err}`);
       console.error(err);
@@ -152,7 +131,6 @@ export const updateItem = (schemaName, name) => {
         error: err,
       });
     }
-
     console.log(`Hack_avengers - 200 in 'update${name}': ${name} updated!`);
     return res.status(200).json({
       success: true,
@@ -161,9 +139,9 @@ export const updateItem = (schemaName, name) => {
     });
   };
 }
-
 export const deleteItem = (PatientSchema, ExamSchema, name) => {
   return async (req, res) => {
+    const oneExam = await ExamSchema.findOne({ patient: req.params.id });
     // delete from both patient and exam
     if (name === "patient") {
       //** DELETING FROM PATIENT SCHEMA*/
@@ -184,10 +162,13 @@ export const deleteItem = (PatientSchema, ExamSchema, name) => {
           });
         }
 
-        // return res.status(200).json({
-        //   success: true,
-        //   item: item,
-        // });
+        if(!oneExam){
+          return res.status(200).json({
+            success: true,
+            // item: item,
+          });
+        }
+        
       }).catch(err => {
         console.error(`Hack_avengers - caught error in 'delete${name}': ${err}`);
         console.error(err);
@@ -196,37 +177,44 @@ export const deleteItem = (PatientSchema, ExamSchema, name) => {
       //if (deletedPatient.Exam) {
 
       //** DELETING FROM EXAM SCHEMA*/
-        await ExamSchema.deleteOne({ patient: req.params.id }, (err, item) => {
-          if (err) {
-            console.error(`Hack_avengers - 400 in 'delete exam': ${err}`);
-            return res.status(400).json({
-              succes: false,
-              error: err,
-            });
-          }
 
-          if (!item) {
-            console.error(`Hack_avengers - 400 in 'delete${name}': ${name} not found!`);
-            return res.status(400).json({
-              success: false,
-              error: `exam data not found!`,
-            });
-          }
 
-          return res.status(200).json({
-            success: true,
-            item: item,
+        if(!oneExam){
+          return;
+        } else {
+          await ExamSchema.deleteOne({ patient: req.params.id }, (err, item) => {
+            if (err) {
+              console.error(`Hack_avengers - 400 in 'delete exam': ${err}`);
+              return res.status(400).json({
+                succes: false,
+                error: err,
+              });
+            }
+  
+            if (!item) {
+              console.error(`Hack_avengers - 400 in 'delete${name}': ${name} not found!`);
+              return res.status(400).json({
+                success: false,
+                error: `exam data not found!`,
+              });
+            }
+
+  
+            return (
+              // res.setHeader('Content-Type', 'application/json'),
+              res.status(200).json({
+              success: true,
+            }));
+          }).catch(err => {
+            console.error(`Hack_avengers - caught error in 'delete${name}': ${err}`);
+            console.error(err);
+            return err;
           });
-        }).catch(err => {
-          console.error(`Hack_avengers - caught error in 'delete${name}': ${err}`);
-          console.error(err);
-          return err;
-        });
-      //}
+        }
     } else {
 
       // delete only from exam schema
-      await ExamSchema.findOneAndDelete({ patient: req.params.id }, (err, item) => {
+      await ExamSchema.findOneAndDelete({ _id: req.params.id }, (err, item) => {
         if (err) {
           console.error(`Hack_avengers - 400 in 'delete${name}': ${err}`);
           return res.status(400).json({
@@ -243,10 +231,10 @@ export const deleteItem = (PatientSchema, ExamSchema, name) => {
           });
         }
 
-        return res.status(200).json({
+        return (
+        res.status(200).json({
           success: true,
-          item: item,
-        });
+        }));
       }).catch(err => {
         console.error(`Hack_avengers - caught error in 'delete${name}': ${err}`);
         console.error(err);
@@ -256,25 +244,18 @@ export const deleteItem = (PatientSchema, ExamSchema, name) => {
     }
   };
 }
-
-export const getFromTwoSchema = (patientName, examName, name) => {
+export const getFromTwoSchema = (patientName, examName) => {
   return async (req, res) => {
-
     let examsDatas = await examName.find({});
-    
-    const allData = examsDatas.map(async exam => {
-      const patient = await patientName.find({_id: exam.patient});
-      console.log("Inside allData: ");
-      console.log(patient[0]);
-      return {...exam._doc, ...patient[0]._doc};
+    const allData = examsDatas.map(async exam =>{
+      const patient = await patientName.findOne({_id: exam.patient});
+      if(patient){
+        //console.log(exam);
+        return { ...patient._doc,...exam._doc};
+      }
     });
-    
-    
     const items = await Promise.all(allData);
-
-    console.log("All Items: ");
-    
-    console.log(items);
+    //console.log(items);
     return res.status(200).json(items);
   };
-}
+};
