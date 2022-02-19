@@ -29,45 +29,45 @@ const AdminTable = () => {
   const [idOfItemToDelete, setIdOfItemToDelte]  = React.useState('')
   const [deleteSuccess, setDeleteSuccess] = React.useState(false)
   const [openPopup, setOpenPopup] = useState(false)
-  const { patientInfo, isLoading, setPatientInfo, setEditValue } = useContext(AppContext);
-  
+  const { allPatients, isLoading, setAllPatients, setEditValue } = useContext(AppContext);
+  console.log(allPatients);
   const columns = useMemo(
     () =>
-      patientInfo[0]
-        ? Object.keys(patientInfo[0]).map((key) => {
-            if (key === "patient"){
+    allPatients[0]
+        ? Object.keys(allPatients[0]).map((key) => {
+            if (key === "_id"){
               return {
                 Header: "MODIFY",
                 accessor: key,
                 Cell: ({ value }) => (
                   <div>
-                  <Link to={`/admin/patient/${value}`} component="link" underline="hover">Modify</Link>
+                  <Link to={`/admin/patient/${value}`} component="link" underline="hover">{value}</Link>
                   </div>
 
                 ),
               };
             }
 
-              if (key === "image"){
-                return {
-                  Header: "Xray Image",
-                  accessor: key,
-                  Cell: ({ value }) => <CardMedia
-                  component="img"
-                  height="80px"
-                  width="100px"
-                  image={`https://ohif-hack-diversity-covid.s3.amazonaws.com/covid-png/${value}`}
-                  alt="xray-image"
-                  />
-                };
-              }
-              if (key === "score"){
-                return {
-                  Header: "BRIXIA SCORE",
-                  accessor: key,
-                  Cell: ({ value }) => value.join(", ")
-                };
-              }
+              // if (key === "image"){
+              //   return {
+              //     Header: "Xray Image",
+              //     accessor: key,
+              //     Cell: ({ value }) => <CardMedia
+              //     component="img"
+              //     height="80px"
+              //     width="100px"
+              //     image={`https://ohif-hack-diversity-covid.s3.amazonaws.com/covid-png/${value}`}
+              //     alt="xray-image"
+              //     />
+              //   };
+              // }
+              // if (key === "score"){
+              //   return {
+              //     Header: "BRIXIA SCORE",
+              //     accessor: key,
+              //     Cell: ({ value }) => value.join(", ")
+              //   };
+              // }
 
             return {
 
@@ -77,20 +77,20 @@ const AdminTable = () => {
             };
           })
         : [],
-    [patientInfo]
+    [allPatients]
   );
 
   // console.log(patientInfo)
 
-  const data = useMemo(() => [...patientInfo], [patientInfo]);
+  const data = useMemo(() => [...allPatients], [allPatients]);
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 React.useEffect(() => {
-  setPatientInfo(deleteSuccess ? data.filter(item => item._id !== idOfItemToDelete) : data)
+  setAllPatients(deleteSuccess ? data.filter(item => item._id !== idOfItemToDelete) : data)
   // setDeleteSuccess(false)
 }, [deleteSuccess, idOfItemToDelete])
-  
+
   React.useEffect(() => {
     const deleteItem = async (id) => {
       try {
@@ -105,7 +105,7 @@ React.useEffect(() => {
       }
     }
     deleteItem(idOfItemToDelete);
-    
+
   }, [idOfItemToDelete, deleteSuccess])
 
   // const actionButtons = (hooks) => {
@@ -115,27 +115,27 @@ React.useEffect(() => {
   //       id: "modify",
   //       Header: "Modify",
   //       Cell: ({ row }) => (
-          
+
   //         <Grid item xs={8}>
-                
+
   //                <Button>
   //                <Link sx={{cursor: "pointer", color: "inherit"}} to={`/admin/patient/${row.values.patient}/`}>
   //                  Modify
   //                 </Link>
   //                </Button>
-                  
+
   //         </Grid>
   //       ),
   //     },
   //   ]);
   // }
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-const tableInstance = useTable(  
+const tableInstance = useTable(
   {
   columns,
    data,
   initialState: {
-    hiddenColumns: ["createdAt", "updatedAt", "__v", "race", "patient_id", "mortality", "_id", "icu_admit"]
+    hiddenColumns: ["createdAt", "updatedAt", "__v", "patient_id"]
   }
   },
   useGlobalFilter,
@@ -161,7 +161,7 @@ const {preGlobalFilteredRows,
       </Container>
     );
 
-    if(isLoading === false && !patientInfo.length){
+    if(isLoading === false && !allPatients.length){
       return (
         <Container>
           <Alert severity="error">No data found!</Alert>
@@ -174,7 +174,7 @@ const {preGlobalFilteredRows,
       <Popup openPopup={openPopup} setOpenPopup={setOpenPopup}>
       </Popup>
       <Stack direction="row">
-      <GlobalFilter preGlobalFilteredRows={preGlobalFilteredRows} 
+      <GlobalFilter preGlobalFilteredRows={preGlobalFilteredRows}
         setGlobalFilter={setGlobalFilter} globalFilter={state.globalFilter}/>
       <DefaultButton
             text="Add New"
@@ -183,7 +183,7 @@ const {preGlobalFilteredRows,
             sx={{height: "40px", marginRight: "1.4rem", marginTop: "1rem"}}
           />
         </Stack>
-      <Table setPatientInfo={setPatientInfo} setEditValue={setEditValue} tableInstance={tableInstance}/>
+      <Table setAllPatients={setAllPatients} setEditValue={setEditValue} tableInstance={tableInstance}/>
     </div>
   );
 };

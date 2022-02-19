@@ -58,7 +58,7 @@ const AdminDetailsPage = () => {
 
     fetchData("patient", patient_id, setPatientInfo);
     fetchData("exam", patient_id, setExamInfo);
-   
+
   }, [patient_id]);
 
   function handleClick(index){
@@ -74,7 +74,7 @@ const AdminDetailsPage = () => {
     return;
   }
 
-  
+
   patientRender();
 
 // Reload page
@@ -97,9 +97,9 @@ function refreshPage() {
       }
     }
     deleteItem(examId);
-    
+
   }, [examId, state.open]);
-  
+
   // Snack bar handler
   const handleClose = () => {
     setState({ ...state, open: false });
@@ -107,11 +107,11 @@ function refreshPage() {
   // Birixia color control
   function getColor(item){
     if (item === 0) { return "success"}
-     else if (item === 1) {return "warning"}
-     else if (item === 2) {return "error"}
+     else if (item === 1) {return "primary"}
+     else if (item === 2) {return "info"}
      else{return "error"}
   }
- 
+
   const objKey = Object.keys(patientInfo[0])
   return (
   <Container>
@@ -155,7 +155,7 @@ function refreshPage() {
           </div>
           <Divider />
           <CardContent>
-            
+
       <List
       sx={{
         width: '100%',
@@ -172,7 +172,7 @@ function refreshPage() {
           {item.replace(/(?:_| |\b)(\w)/g, function(str, p1) { return p1.toUpperCase()})}
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary={item.replace(/(?:_| |\b)(\w)/g, function(str, p1) { return p1.toUpperCase()})} 
+        <ListItemText primary={item.replace(/(?:_| |\b)(\w)/g, function(str, p1) { return p1.toUpperCase()})}
         secondary={(item === 'createdAt' || item === "updatedAt") ? new Date(patientInfo[0][item]).toLocaleString(): patientInfo[0][item]}/>
       </ListItem>
       <Divider variant="inset" component="li" />
@@ -181,7 +181,7 @@ function refreshPage() {
               )
             })}
       </List>
-           
+
           </CardContent>
         </Card> : <h1>No patient data</h1>}
 
@@ -190,7 +190,7 @@ function refreshPage() {
           <Divider />
           <div sx={{display: "flex", flexDirection: 'row'}}>
           {examInfo?.map((item, index) => {
-           
+
             return (
               <div key={index}>
                  <Button onClick={() => handleClick(index)}>
@@ -235,7 +235,7 @@ function refreshPage() {
 
               </div>
             )
-            
+
           })}
 
           </div>
