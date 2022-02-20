@@ -30,7 +30,7 @@ const AdminTable = () => {
   const [deleteSuccess, setDeleteSuccess] = React.useState(false)
   const [openPopup, setOpenPopup] = useState(false)
   const { allPatients, isLoading, setAllPatients, setEditValue } = useContext(AppContext);
-  console.log(allPatients);
+
   const columns = useMemo(
     () =>
     allPatients[0]
@@ -47,28 +47,6 @@ const AdminTable = () => {
                 ),
               };
             }
-
-              // if (key === "image"){
-              //   return {
-              //     Header: "Xray Image",
-              //     accessor: key,
-              //     Cell: ({ value }) => <CardMedia
-              //     component="img"
-              //     height="80px"
-              //     width="100px"
-              //     image={`https://ohif-hack-diversity-covid.s3.amazonaws.com/covid-png/${value}`}
-              //     alt="xray-image"
-              //     />
-              //   };
-              // }
-              // if (key === "score"){
-              //   return {
-              //     Header: "BRIXIA SCORE",
-              //     accessor: key,
-              //     Cell: ({ value }) => value.join(", ")
-              //   };
-              // }
-
             return {
 
                 Header: key.toUpperCase().replaceAll("_", " "),
