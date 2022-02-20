@@ -6,7 +6,6 @@ import PatientTable from "./pages/PatientTable";
 import PatientDetailsPage from "./pages/PatientDetailsPage";
 import Header from "./components/Header";
 import NotFound from "./pages/NotFound";
-// import AddPatient from "./pages/AddPatient";
 import AdminTable from "./pages/AdminTable";
 import MainFooter from "./components/MainFooter";
 // MUI
@@ -19,6 +18,7 @@ import AdminDetailsPage from "./pages/AdminDetailsPage";
 function App() {
   const [patientInfo, setPatientInfo] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [allPatients, setAllPatients] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,14 +33,30 @@ function App() {
     };
 
     fetchData();
+
   }, []);
-// console.log(patientInfo)
-  
+
+ useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const result = await axios.get(`api/patients`);
+      const body = await result.data;
+      setAllPatients(body);
+      setIsLoading(false)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  fetchData();
+
+}, []);
+
   return (
     <Router>
       <CssBaseline />
       <Header />
-      <AppContext.Provider value={{patientInfo, isLoading, setPatientInfo}}>
+      <AppContext.Provider value={{patientInfo, isLoading, setPatientInfo, allPatients, setAllPatients}}>
         <Routes>
           <Route path="/" element={<PatientTable  />} exact />
           <Route path="/patients" element={<PatientTable  />} />
