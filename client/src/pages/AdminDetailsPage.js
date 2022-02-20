@@ -78,9 +78,9 @@ const AdminDetailsPage = () => {
   patientRender();
 
 // Reload page
-function refreshPage() {
-  window.location.reload();
-}
+// function refreshPage() {
+//   window.location.reload();
+// }
 
 
   React.useEffect(() => {
@@ -184,7 +184,7 @@ function refreshPage() {
 
           </CardContent>
         </Card> : <h1>No patient data</h1>}
-
+            {examInfo.length ? 
         <Card sx={{ marginLeft: "1rem", flexDirection: 'row'}}>
           <Typography variant="h6">Exam Info: {examInfo.length} exam(s)</Typography>
           <Divider />
@@ -239,7 +239,7 @@ function refreshPage() {
           })}
 
           </div>
-        </Card>
+        </Card> : <h3>No exam found!</h3>                }
       </div>
     </Container>
   );
