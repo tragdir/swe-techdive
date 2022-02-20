@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from "react";
 import { Alert, Button, Container, TextField, Box, Grid } from "@mui/material";
 import Buttons from "../components/Button";
@@ -53,3 +54,5 @@ const AddPatient = () => {
 };
 
 export default AddPatient;
+=======
+>>>>>>> upstream/main

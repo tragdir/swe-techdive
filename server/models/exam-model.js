@@ -10,11 +10,11 @@ const ExamSchema = new Schema(
             }
         ,
         image: String,
+        description: String,
         score: {
             type: [Number],
             require: true
         },
-        examInfo: String,
         keyFindings: String
     },
 

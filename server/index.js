@@ -13,11 +13,12 @@ app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 // Databse config ************************************
-// we use .env when we use online database url
-// const dbUrl = process.env.DB_URL;
-const dbUrl = process.env.DB_URL || "mongodb://127.0.0.1:27017/patientdb";
+//const dbUrl = process.env.DB_URL || "mongodb://127.0.0.1:27017/patientdb";
+//const uri = "mongodb+srv://hereGoesMalik'sUserAndPssw@cluster0.vyrz3.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const uri = "mongodb+srv://wilyendri:wilyendridb@techdivedb.olqoj.mongodb.net/TechDiveDB?retryWrites=true&w=majority";
+
 mongoose
-  .connect(dbUrl, {
+  .connect(uri, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
@@ -34,8 +35,132 @@ db.once("open", () => {
   console.log("Database Connected");
 });
 //   **********************
+import { Patient } from './models/patient-model.js';
 
+const data = [
+  {
+      "patient_id": "COVID-19-AR-16434409",
+      "age": 51,
+      "sex": "M",
+      "race": "BLACK OR AFRICAN AMERICAN",
+      "zip": 722,
+      "latest_bmi": 37.7,
+      "icu_admit": "N",
+      "mortality": "N"
+  },
+  {
+      "patient_id": "COVID-19-AR-16434381",
+      "age": 44,
+      "sex": "F",
+      "race": "BLACK OR AFRICAN AMERICAN",
+      "zip": 721,
+      "latest_bmi": 64.6,
+      "icu_admit": "N",
+      "mortality": "N"
+  },
+  {
+      "patient_id": "COVID-19-AR-16406513",
+      "age": 44,
+      "sex": "M",
+      "race": "BLACK OR AFRICAN AMERICAN",
+      "zip": 722,
+      "latest_bmi": 33.3,
+      "icu_admit": "Y",
+      "mortality": "N"
+  },
+  {
+      "patient_id": "COVID-19-AR-16439216",
+      "age": 61,
+      "sex": "F",
+      "race": "BLACK OR AFRICAN AMERICAN",
+      "zip": 722,
+      "latest_bmi": 36,
+      "icu_admit": "N",
+      "mortality": "N"
+  },
+  {
+      "patient_id": "COVID-19-AR-16406491",
+      "age": 49,
+      "sex": "F",
+      "race": "BLACK OR AFRICAN AMERICAN",
+      "zip": 721,
+      "latest_bmi": 43.85,
+      "icu_admit": "N",
+      "mortality": "N"
+  },
+  {
+      "patient_id": "COVID-19-AR-16406496",
+      "age": 75,
+      "sex": "F",
+      "race": "BLACK OR AFRICAN AMERICAN",
+      "zip": 721,
+      "latest_bmi": 23.57,
+      "icu_admit": "N",
+      "mortality": "N"
+  },
+  {
+      "patient_id": "COVID-19-AR-16424082",
+      "age": 48,
+      "sex": "M",
+      "race": "BLACK OR AFRICAN AMERICAN",
+      "zip": 721,
+      "latest_bmi": 29.8,
+      "icu_admit": "Y",
+      "mortality": "N"
+  },
+  {
+      "patient_id": "COVID-19-AR-16406504",
+      "age": 39,
+      "sex": "M",
+      "race": "WHITE",
+      "zip": 722,
+      "latest_bmi": 33.5,
+      "icu_admit": "Y",
+      "mortality": "N"
+  },
+  {
+      "patient_id": "COVID-19-AR-16434350",
+      "age": 55,
+      "sex": "F",
+      "race": "BLACK OR AFRICAN AMERICAN",
+      "zip": 720,
+      "latest_bmi": 27.46,
+      "icu_admit": "N",
+      "mortality": "N"
+  },
+  {
+      "patient_id": "COVID-19-AR-16406502",
+      "age": 88,
+      "sex": "F",
+      "race": "WHITE",
+      "zip": 721,
+      "latest_bmi": 34.9,
+      "icu_admit": "N",
+      "mortality": "N"
+  },
+  {
+      "patient_id": "COVID-19-AR-16406494",
+      "age": 67,
+      "sex": "F",
+      "race": "OTHER",
+      "zip": 722,
+      "latest_bmi": 28.3,
+      "icu_admit": "N",
+      "mortality": "N"
+  },
+  {
+      "patient_id": "COVID-19-AR-16424105",
+      "age": 70,
+      "sex": "F",
+      "race": "WHITE",
+      "zip": 722,
+      "latest_bmi": 18.7,
+      "icu_admit": "N",
+      "mortality": "N"
+  },
+]
 app.get('/', (req, res) => {
+  Patient.insertMany(data)
     res.send('Hello World!');
 });
 
