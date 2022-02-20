@@ -6,7 +6,6 @@ import PatientTable from "./pages/PatientTable";
 import PatientDetailsPage from "./pages/PatientDetailsPage";
 import Header from "./components/Header";
 import NotFound from "./pages/NotFound";
-// import AddPatient from "./pages/AddPatient";
 import AdminTable from "./pages/AdminTable";
 import MainFooter from "./components/MainFooter";
 // MUI
@@ -24,7 +23,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-          const result = await axios.get(`api/data`);
+        const result = await axios.get(`api/data`);
         const body = await result.data;
         setPatientInfo(body);
         setIsLoading(false)
@@ -36,12 +35,11 @@ function App() {
     fetchData();
 
   }, []);
- console.log(patientInfo)
 
  useEffect(() => {
   const fetchData = async () => {
     try {
-        const result = await axios.get(`api/patients`);
+      const result = await axios.get(`api/patients`);
       const body = await result.data;
       setAllPatients(body);
       setIsLoading(false)
