@@ -26,10 +26,10 @@ export default function MenuPopupState({state, setState, id}) {
           }
         }
         deleteItem(deleteData);
-        
+
       }, [deleteData, state.open]);
-    const handleTriger = () => {
-        setDeleteData(id)
+    const handleTriger = (myId) => {
+        setDeleteData(myId)
         // setDeleteData('')
     }
     // console.log(deleteData)
@@ -39,7 +39,7 @@ export default function MenuPopupState({state, setState, id}) {
     <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} btnName="Continue" title='Warning!'>
       <Box>
       <Typography>
-        Deleting patient will erase all its exam?
+        Deleting patient will erase all its exam.
       </Typography>
       </Box>
     </Popup>
@@ -52,7 +52,7 @@ export default function MenuPopupState({state, setState, id}) {
           </IconButton>
           <Menu {...bindMenu(popupState)}>
             <MenuItem onClick={popupState.close }>Edit</MenuItem>
-            <MenuItem onClick={() => setOpenPopup(true)}>Delete</MenuItem>
+            <MenuItem onClick={openPopup}>Delete</MenuItem>
           </Menu>
         </React.Fragment>
       )}
