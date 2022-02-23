@@ -15,10 +15,7 @@ export default function PatientUpdateForm({patientInfo}) {
    
     const [updateState, setUpdateState] = useState(false)
     const [values, setValues] = useState(patientInfo);
-    // console.log(values)
-
-    const [updatedValue, setUpdatedValue] = useState({});
-  
+    // console.log(values)  
     
     const handleInputChange = e => {
         const { name, value } = e.target
