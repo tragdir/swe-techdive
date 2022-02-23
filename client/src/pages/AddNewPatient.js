@@ -5,25 +5,15 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import { FormControlLabel, RadioGroup, Radio, Container, FormLabel } from "@mui/material";
 
-
-import DateAdapter from '@mui/lab/AdapterDateFns';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
-
-
-
 const AddNewPatient = () => {
 
   const initialValues = {
-    firstName: '',
-    lastName: '',
+ 
     age: '',
     gender: '',
     race: '',
     zipcode: '',
     latestBmi: '',
-    latestWeight: '',
     icoAdmit: '',
     mortality: ''
   }
@@ -118,10 +108,6 @@ const AddNewPatient = () => {
             />
           </Grid>
 
-
-
-
-      
         <Grid item xs={8}>
         <Container maxWidth="sx" >
 
