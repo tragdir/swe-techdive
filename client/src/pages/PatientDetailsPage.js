@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import { Link, useParams } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -17,32 +16,35 @@ import Stack from '@mui/material/Stack';
 import Skeleton from '@mui/material/Skeleton';
 import Chip from '@mui/material/Chip';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import useFetch from "../components/UseFetch";
 
 
 const PatientDetailsPage = () => {
-  const [isLoading, setIsLoading] = useState(true)
-  const [examInfo, setExamInfo] = useState([]);
-  const [patientInfo, setPatientInfo] = useState([{patient: ""}])
+  // const [isLoading, setIsLoading] = useState(true)
+  // const [examInfo, setExamInfo] = useState([]);
+  // const [patientInfo, setPatientInfo] = useState([])
   const { patient_id } = useParams();
 
+ const {itemInfo: patientInfo, isLoading} = useFetch(`patient/${patient_id}`);
+ 
+ const {itemInfo: examInfo} = useFetch(`exam/${patient_id}`);
 
+  // useEffect(() => {
+  //   const fetchData = async (name, id, stateType) => {
+  //     try {
+  //       const result = await axios.get(`/api/${name}/${id}`);
+  //       const body = result.data;
+  //       stateType(body);
+  //       setIsLoading(false)
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
 
-  useEffect(() => {
-    const fetchData = async (name, id, stateType) => {
-      try {
-        const result = await axios.get(`/api/${name}/${id}`);
-        const body = result.data;
-        stateType(body);
-        setIsLoading(false)
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData("patient", patient_id, setPatientInfo);
-    fetchData("exam", patient_id, setExamInfo);
+  //   fetchData("patient", patient_id, setPatientInfo);
+  //   fetchData("exam", patient_id, setExamInfo);
    
-  }, [patient_id]);
+  // }, [patient_id]);
 
 
   const patientRender = () => {
@@ -70,6 +72,15 @@ const PatientDetailsPage = () => {
      else if (item === 2) {return "error"}
      else{return "error"}
   }
+
+  if(patientInfo === null) {
+    return <Typography>No Patient data </Typography>
+  }
+
+  if(examInfo === null) {
+    return <Typography>No Patient data </Typography>
+  }
+  
  
   const objKey = Object.keys(patientInfo[0])
  
@@ -92,7 +103,6 @@ const PatientDetailsPage = () => {
           justifyContent: "space-around",
         }}
       >
-        {!isLoading ?
         <Card sx={{ minWidth: 275 }}>
           <div>
           <AccountCircle sx={{ marginBottom: '-5px'}}/> Patient Info:
@@ -127,7 +137,7 @@ const PatientDetailsPage = () => {
       </List>
            
           </CardContent>
-        </Card> : <h1>No patient data</h1>}
+        </Card>
 
         <Card sx={{ marginLeft: "1rem", flexDirection: 'row'}}>
           <Typography variant='h5'>Exam Info: {examInfo.length} exam(s)</Typography>
