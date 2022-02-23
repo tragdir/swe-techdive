@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import Table from "../components/Table";
 import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
-import { Container, Alert, Typography } from "@mui/material";
-import AccountCircle from "@mui/icons-material/AccountCircle";
+import { Container, Alert } from "@mui/material";
+// import AccountCircle from "@mui/icons-material/AccountCircle";
 import { Stack } from '@mui/material';
 import { AppContext } from "../context";
 import { useTable, useGlobalFilter, useSortBy} from "react-table";
@@ -15,28 +15,27 @@ import { useTable, useGlobalFilter, useSortBy} from "react-table";
 import Button from '@mui/material/Button';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Grid from '@mui/material/Grid';
-import EditIcon from '@mui/icons-material/Edit';
 import GlobalFilter from "../components/GlobalFilter";
 
 import axios from "axios";
 // ****************************************************
 // Popup
-import Popup from "../components/Popup";
+// import Popup from "../components/Popup";
 import DefaultButton from "../components/controls/DefaultButton";
 import { Snackbar } from "@mui/material";
-
 
 const AdminTable = () => {
   const [idOfItemToDelete, setIdOfItemToDelte]  = useState('')
   const [deleteSuccess, setDeleteSuccess] = useState(false)
   const [openPopup, setOpenPopup] = useState(false)
   const { allPatients, isLoading, setAllPatients } = useContext(AppContext);
-
+  
   const [alert, setAlert] = useState({
     open: false,
     vertical: 'top',
     horizontal: 'center',
   });
+ 
 
   const handleClose = () => {
     setAlert({ ...state, open: false });
@@ -63,9 +62,9 @@ const AdminTable = () => {
   }, [idOfItemToDelete, alert.open]);
   
 
-  console.log(idOfItemToDelete)
-  console.log(deleteSuccess)
-
+  // console.log(idOfItemToDelete)
+  // console.log(deleteSuccess)
+  
   const columns = useMemo(
     () =>
     allPatients[0]
