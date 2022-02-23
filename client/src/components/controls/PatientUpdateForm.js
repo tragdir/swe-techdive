@@ -12,11 +12,11 @@ import { MenuItem, Typography } from '@mui/material';
 import axios from 'axios';
 
 export default function PatientUpdateForm({patientInfo}) {
-   
+
     const [updateState, setUpdateState] = useState(false)
     const [values, setValues] = useState(patientInfo);
-    // console.log(values)  
-    
+    // console.log(values)
+
     const handleInputChange = e => {
         const { name, value } = e.target
         setValues({
@@ -33,21 +33,21 @@ export default function PatientUpdateForm({patientInfo}) {
                            .then(response => {
                             setUpdateState(response.data.success)
                             console.log(response.data)
-                            
+
                            })
                            .catch((e) => console.log(e))
-                           .finally(() => window.location.reload(false))  
+                           .finally(() => window.location.reload(false))
         }
-   
-    
+
+
     const handleReset = async () => {
-        setValues(patientInfo) 
+        setValues(patientInfo)
     }
 
         if(updateState){
             return <Typography>Patient updated successfuly!</Typography>
         }
-     
+
   return (
     <Box
       component="form"
@@ -100,7 +100,7 @@ export default function PatientUpdateForm({patientInfo}) {
       </RadioGroup>
     </FormControl>
 
-      
+
         <TextField
           error={values.zip === ''}
           id="filled-error"
@@ -128,7 +128,7 @@ export default function PatientUpdateForm({patientInfo}) {
     </FormControl>
       </div>
       <div>
-        
+
         <TextField
           error={values.latest_bmi === ''}
           id="filled-error"
