@@ -70,7 +70,6 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AppContext.Provider>
-      <MainFooter />
     </Router>
   );
 }
