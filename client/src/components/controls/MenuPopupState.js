@@ -51,8 +51,8 @@ export default function MenuPopupState({state, setState, id}) {
           </MoreVertIcon>
           </IconButton>
           <Menu {...bindMenu(popupState)}>
-            <MenuItem onClick={popupState.close }>Edit</MenuItem>
-            <MenuItem onClick={openPopup}>Delete</MenuItem>
+            <MenuItem onClick={() => setOpenPopup(true) }>Edit</MenuItem>
+            <MenuItem onClick={popupState.close}>Delete</MenuItem>
           </Menu>
         </React.Fragment>
       )}

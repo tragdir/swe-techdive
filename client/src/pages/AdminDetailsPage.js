@@ -24,6 +24,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FormInput from "../components/controls/FormInput";
 import Popup from "../components/Popup";
 import MenuPopupState from "../components/controls/MenuPopupState";
+import PatientUpdateForm from "../components/controls/PatientUpdateForm";
 
 
 const AdminDetailsPage = () => {
@@ -34,6 +35,8 @@ const AdminDetailsPage = () => {
   const [examId, setExamId] = useState('')
   const [singleExam, setSingleExam] = useState([]);
   const [openPopup, setOpenPopup] = useState(false)
+  const [openPatientForm, setOpenPatientForm] = useState(false)
+
   const [deleteStatus, setDeleteStatus] = useState(false)
 
 
@@ -42,7 +45,6 @@ const AdminDetailsPage = () => {
       vertical: 'top',
       horizontal: 'center',
     });
-
 
   useEffect(() => {
     const fetchData = async (name, id, stateType) => {
@@ -77,11 +79,6 @@ const AdminDetailsPage = () => {
 
   patientRender();
 
-// Reload page
-// function refreshPage() {
-//   window.location.reload();
-// }
-
 
   React.useEffect(() => {
     const deleteItem = async (id) => {
@@ -91,6 +88,7 @@ const AdminDetailsPage = () => {
           console.log(result.data)
           setState({ open: true });
           setExamId("")
+          window.location.reload(false)
         }
       } catch (error) {
         console.log(error)
@@ -122,7 +120,7 @@ const AdminDetailsPage = () => {
     </Snackbar>
     <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} btnName='Update' title="Editing exam">
         <FormInput singleExam={singleExam}/>
-      </Popup>
+    </Popup>
       <Paper sx={{padding: "1rem", marginBottom: "1rem"}}>
       <Link to={'/admin'} style={{ textDecoration: 'none' }}>
         <Button>
@@ -144,14 +142,15 @@ const AdminDetailsPage = () => {
         <Card sx={{ minWidth: 275 }}>
           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
           <div><Typography variant="h6"><AccountCircle sx={{ marginBottom: '-5px'}}/> Patient Info:</Typography></div>
-          {/* <Box>
-          <Button onClick={() => {}}>
+          <Box>
+          <Popup openPopup={openPatientForm} setOpenPopup={setOpenPatientForm} btnName='Update' title={`Editing Patient: ${patientInfo[0]._id}`}>
+           <PatientUpdateForm patientInfo={patientInfo[0]}/>
+            </Popup>
+          <Button onClick={() => setOpenPatientForm(true)}>
                      <EditIcon sx={{cursor: "pointer", color: "yellowgreen"}}/>
             </Button>
-            <Button onClick={() => {}}><DeleteForeverIcon sx={{color: "red"}}/></Button>
-            </Box> */}
-            {/* state, setState, deleteId */}
-            <MenuPopupState state={state} setState={setState} id={patientInfo[0]._id}/>
+            {/* <Button onClick={() => {}}><DeleteForeverIcon sx={{color: "red"}}/></Button> */}
+            </Box>
           </div>
           <Divider />
           <CardContent>
@@ -183,7 +182,11 @@ const AdminDetailsPage = () => {
       </List>
 
           </CardContent>
-        </Card> : <h1>No patient data</h1>}
+        </Card> : <Stack spacing={1}>
+        <Skeleton variant="circular" width={40} height={40} />
+      <Skeleton variant="text" />
+      <Skeleton variant="rectangular" width={210} height={118} />
+    </Stack>}
             {examInfo.length ? 
         <Card sx={{ marginLeft: "1rem", flexDirection: 'row'}}>
           <Typography variant="h6">Exam Info: {examInfo.length} exam(s)</Typography>

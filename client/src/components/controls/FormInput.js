@@ -46,6 +46,16 @@ export default function FormInput({singleExam}) {
           rows={4}
           value={singleExam.key_findings}
         />
+        <TextField
+          id="filled-multiline-flexible"
+          label="Birixia"
+          multiline
+          maxRows={4}
+          value={singleExam.score.join(',')}
+          onChange={handleChange}
+          variant="filled"
+        />
+        
 
       </div>
       <div>
@@ -56,15 +66,15 @@ export default function FormInput({singleExam}) {
           multiline
           variant="filled"
         />
-        <TextField
-          id="filled-multiline-flexible"
-          label="Birixia"
+        <img width={170} src={`https://ohif-hack-diversity-covid.s3.amazonaws.com/covid-png/${singleExam.image}`} alt="" />
+         {/* <TextField
+          id="outlined-multiline-flexible"
+          label="Description"
           multiline
           maxRows={4}
-          value={singleExam.score.join(',')}
+          value={singleExam.image}
           onChange={handleChange}
-          variant="filled"
-        />
+        /> */}
       </div>
       
     </Box>
