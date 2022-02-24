@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import axios from "axios";
@@ -13,7 +13,7 @@ import { CssBaseline } from "@mui/material";
 
 import { AppContext } from "./context";
 import AdminDetailsPage from "./pages/AdminDetailsPage";
-
+import AddNewPatient from "./pages/AddNewPatient";
 
 function App() {
   const [patientInfo, setPatientInfo] = useState([]);
@@ -36,40 +36,40 @@ function App() {
 
   }, []);
 
- useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const result = await axios.get(`api/patients`);
-      const body = await result.data;
-      setAllPatients(body);
-      setIsLoading(false)
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await axios.get(`api/patients`);
+        const body = await result.data;
+        setAllPatients(body);
+        setIsLoading(false)
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-  fetchData();
+    fetchData();
 
-}, []);
+  }, []);
 
   return (
     <Router>
       <CssBaseline />
       <Header />
-      <AppContext.Provider value={{patientInfo, isLoading, setPatientInfo, allPatients, setAllPatients}}>
+      <AppContext.Provider value={{ patientInfo, isLoading, setPatientInfo, allPatients, setAllPatients }}>
         <Routes>
-          <Route path="/" element={<PatientTable  />} exact />
-          <Route path="/patients" element={<PatientTable  />} />
+          <Route path="/" element={<PatientTable />} exact />
+          <Route path="/patients" element={<PatientTable />} />
           <Route
             path="/patient/:patient_id"
             element={<PatientDetailsPage />}
           />
+          <Route path="/addnewpatient" element={<AddNewPatient />} />
           <Route path="/admin" element={<AdminTable />} />
           <Route path="/admin/patient/:patient_id" element={<AdminDetailsPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AppContext.Provider>
-      <MainFooter/>
     </Router>
   );
 }
