@@ -23,7 +23,7 @@ export default function ExamUpdateForm({examInfo}) {
             ...values,
             [name]: value
         })
-
+    }
         const handleSubmit = async ({image, description, key_findings, score}) => {
             const scoreArray = score.toString().split("");
             let scoreParser = [];
