@@ -23,8 +23,7 @@ export default function PatientUpdateForm({patientInfo}) {
             ...values,
             [name]: value
         })
-        // if (validateOnChange)
-        //     validate({ [name]: value })
+
     }
         const handleSubmit = async ({age, sex, race, zip, icu_admit, latest_bmi, mortality}) => {
             const data = {age, sex, race, zip, icu_admit, latest_bmi, mortality};
