@@ -29,13 +29,13 @@ const AdminTable = () => {
   const [deleteSuccess, setDeleteSuccess] = useState(false)
   const [openPopup, setOpenPopup] = useState(false)
   const { allPatients, isLoading, setAllPatients } = useContext(AppContext);
-  
+
   const [alert, setAlert] = useState({
     open: false,
     vertical: 'top',
     horizontal: 'center',
   });
- 
+
 
   const handleClose = () => {
     setAlert({ ...state, open: false });
@@ -59,12 +59,12 @@ const AdminTable = () => {
 
     deletePatient(idOfItemToDelete)
 
-  }, [idOfItemToDelete, alert.open]);
-  
+  }, [idOfItemToDelete]);
+
 
   // console.log(idOfItemToDelete)
   // console.log(deleteSuccess)
-  
+
   const columns = useMemo(
     () =>
     allPatients[0]
