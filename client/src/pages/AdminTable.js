@@ -8,7 +8,6 @@ import { Container, Alert } from "@mui/material";
 import { Stack } from '@mui/material';
 import { AppContext } from "../context";
 import { useTable, useGlobalFilter, useSortBy} from "react-table";
-
 // +++++++++++++++++++++++++++++++++
 
 // ******************************************************
@@ -20,9 +19,11 @@ import GlobalFilter from "../components/GlobalFilter";
 import axios from "axios";
 // ****************************************************
 // Popup
-// import Popup from "../components/Popup";
+import Popup from "../components/Popup";
 import DefaultButton from "../components/controls/DefaultButton";
 import { Snackbar } from "@mui/material";
+import AddPatientForm from "../components/controls/AddPatientForm";
+
 
 const AdminTable = () => {
   const [idOfItemToDelete, setIdOfItemToDelte]  = useState('')
@@ -161,9 +162,9 @@ const {preGlobalFilteredRows,
 
   return (
     <div>
-      {/* <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} btnName="Delete" title="Warning!">
-        <Typography>Deleting patient erases all its exams</Typography>
-      </Popup> */}
+      <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} title="Add New Patient">
+      <AddPatientForm/>
+      </Popup>
       <Snackbar open={alert.open} autoHideDuration={4000} onClose={handleClose}>
       <Alert onClose={handleClose} severity="success">
           Delete successful!

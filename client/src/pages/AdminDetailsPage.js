@@ -26,6 +26,7 @@ import Popup from "../components/Popup";
 import MenuPopupState from "../components/controls/MenuPopupState";
 import PatientUpdateForm from "../components/controls/PatientUpdateForm";
 import ExamUpdateForm from "../components/controls/ExamUpdateForm";
+import DefaultButton from "../components/controls/DefaultButton";
 
 
 const AdminDetailsPage = () => {
@@ -38,6 +39,7 @@ const AdminDetailsPage = () => {
   const [openPopup, setOpenPopup] = useState(false)
   const [openPatientForm, setOpenPatientForm] = useState(false)
   const [openExamForm, setOpenExamForm] = useState(false)
+  const [addExamOpenPupup, setAddExamOpenPupup] = useState(false)
 
 
   const [deleteStatus, setDeleteStatus] = useState(false)
@@ -125,14 +127,26 @@ const AdminDetailsPage = () => {
         <FormInput singleExam={singleExam}/>
     </Popup>
       <Paper sx={{padding: "1rem", marginBottom: "1rem"}}>
-      <Link to={'/admin'} style={{ textDecoration: 'none' }}>
+        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Popup openPopup={addExamOpenPupup} setOpenPopup={setAddExamOpenPupup} title={`Adding Exam for: ${patientInfo[0]._id}`}>
+           {/* Vlad Form here */}
+           <Typography>Vlad's Add Exam Form</Typography>
+            </Popup>
+        <Link to={'/admin'} style={{ textDecoration: 'none' }}>
         <Button>
         <ArrowBackIcon/> Admin Table
         </Button>
         </Link>
-      <Typography  sx={{textAlign: "center"}}>
+        <Typography variant="h4"  sx={{textAlign: "center"}}>
             Patient Details
           </Typography>
+        <DefaultButton
+            text="Add New Exam"
+            variant="outlined"
+            onClick = {()=> setAddExamOpenPupup(true)}
+           
+          />
+        </div>
       </Paper>
       <div
         style={{
