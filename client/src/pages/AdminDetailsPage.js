@@ -25,6 +25,7 @@ import FormInput from "../components/controls/FormInput";
 import Popup from "../components/Popup";
 import MenuPopupState from "../components/controls/MenuPopupState";
 import PatientUpdateForm from "../components/controls/PatientUpdateForm";
+import ExamUpdateForm from "../components/controls/ExamUpdateForm";
 
 
 const AdminDetailsPage = () => {
@@ -36,6 +37,8 @@ const AdminDetailsPage = () => {
   const [singleExam, setSingleExam] = useState([]);
   const [openPopup, setOpenPopup] = useState(false)
   const [openPatientForm, setOpenPatientForm] = useState(false)
+  const [openExamForm, setOpenExamForm] = useState(false)
+
 
   const [deleteStatus, setDeleteStatus] = useState(false)
 
@@ -187,7 +190,7 @@ const AdminDetailsPage = () => {
       <Skeleton variant="text" />
       <Skeleton variant="rectangular" width={210} height={118} />
     </Stack>}
-            {examInfo.length ? 
+            {examInfo.length ?
         <Card sx={{ marginLeft: "1rem", flexDirection: 'row'}}>
           <Typography variant="h6">Exam Info: {examInfo.length} exam(s)</Typography>
           <Divider />
@@ -196,7 +199,10 @@ const AdminDetailsPage = () => {
 
             return (
               <div key={index}>
-                 <Button onClick={() => handleClick(index)}>
+                <Popup openPopup={openExamForm} setOpenPopup={setOpenExamForm} btnName='Update' title={`Editing Exam: ${examInfo[index]._id}`}>
+                <ExamUpdateForm examInfo={examInfo[index]}/>
+                </Popup>
+                 <Button onClick={() => setOpenExamForm(true)}>
                      <EditIcon sx={{cursor: "pointer", color: "yellowgreen"}}/>
                  </Button>
                  <Button onClick={() => setExamId(examInfo[index]._id)}><DeleteForeverIcon sx={{color: "red"}}/></Button>
@@ -227,6 +233,9 @@ const AdminDetailsPage = () => {
                })}
             </Stack>
                 <Box>
+                <Typography sx={{ mb: 1.5, maxWidth: 400 }} color="text.secondary">
+                Key Findings: {examInfo[index].key_findings}
+              </Typography>
                 <Typography sx={{ mt: 1.5}} variant="caption">
                 Created: {new Date(examInfo[index].createdAt).toLocaleString()}
               </Typography>

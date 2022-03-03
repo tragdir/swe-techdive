@@ -15,7 +15,7 @@ const ExamSchema = new Schema(
             type: [Number],
             require: true
         },
-        keyFindings: String
+        key_findings: String
     },
 
     { timestamps: true },

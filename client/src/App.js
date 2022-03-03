@@ -23,7 +23,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await axios.get(`api/data`);
+        const result = await axios.get(`/api/data`);
         const body = await result.data;
         setPatientInfo(body);
         setIsLoading(false)
@@ -39,7 +39,7 @@ function App() {
  useEffect(() => {
   const fetchData = async () => {
     try {
-      const result = await axios.get(`api/patients`);
+      const result = await axios.get(`/api/patients`);
       const body = await result.data;
       setAllPatients(body);
       setIsLoading(false)
