@@ -191,7 +191,7 @@ const AdminDetailsPage = () => {
       <Skeleton variant="rectangular" width={210} height={118} />
     </Stack>}
             {examInfo.length ?
-        <Card sx={{ marginLeft: "1rem", flexDirection: 'row'}}>
+        <Card sx={{ marginLeft: "1rem", flexDirection: 'row', padding: "0.3rem"}}>
           <Typography variant="h6">Exam Info: {examInfo.length} exam(s)</Typography>
           <Divider />
           <div sx={{display: "flex", flexDirection: 'row'}}>
@@ -207,7 +207,7 @@ const AdminDetailsPage = () => {
                  </Button>
                  <Button onClick={() => setExamId(examInfo[index]._id)}><DeleteForeverIcon sx={{color: "red"}}/></Button>
               <h3>Exam #{index + 1}</h3>
-              <Paper variant="outlined">
+              <Paper variant="outlined" sx={{padding: '0.2rem'}}>
               <Typography sx={{ mb: 1.5 }}  color="text.secondary">
                ID: {examInfo[index].patient}
               </Typography>
