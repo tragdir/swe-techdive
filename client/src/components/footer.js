@@ -9,7 +9,7 @@ const Footer = () => <>
                 <Grid item sm={5} xs={12}>
                     <Info color="action" />
                     <Typography paragraph>
-                        SWE COVID-19 Mini Project 
+                        SWE COVID-19 Mini Project
                         Hack.Diversity 2022 Cohort.
                     </Typography>
                 </Grid>
@@ -17,7 +17,7 @@ const Footer = () => <>
                     <Group color="action" />
                     <Typography paragraph>
                          Team Hack-Avengers Members:
-                         Amanda Bazelais, Wilyendri Duran, Melaku Tachbele, Malik Siguenza, Nicolas Salazar, 
+                         Amanda Bazelais, Wilyendri Duran, Melaku Tachbele, Malik Siguenza, Nicolas Salazar,
                         Vladimir Pierre-Louis & Allyson Ochoa
                     </Typography>
                 </Grid>
