@@ -4,6 +4,9 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import { FormControlLabel, RadioGroup, Radio, Container, FormLabel } from "@mui/material";
+import AddPatient from "../components/controls/AddPatient";
+import axios from 'axios';
+
 
 const AddNewPatient = () => {
 
@@ -50,28 +53,46 @@ const AddNewPatient = () => {
   const [icoAdmitError, setIcoAdmitError] = useState(initialErrorValues.icoAdmit);
   const [mortalityError, setmortalityError] = useState(initialErrorValues.mortality);
 
+
+  const [values,setValues] = useState({});
+
+
   const handleSubmit = (e) => { //handles event when submit is clicked 
     e.preventDefault()
     errorReset();
-    let patientModel =[];
+    
+  let patientModel =[];
 
     
    if(!hasErrors()){
     patientModel = {
       "age" : age,
-      "gender" : gender[0],
+      "sex" : gender[0],
       "race" : race,
-      "zipcode" : zipcode,
-      "latestBmi" : latestBmi,
-      "icoAdmit" : icoAdmit,
+      "zip" : zipcode,
+      "latest_bmi" : latestBmi,
+      "icu_admit" : icoAdmit,
       "mortality" : mortality
     };
-     
-    console.log(JSON.stringify(patientModel))
+  
+    //axios post
+    const   addNewPatient = async () =>{
+      const result = axios.post ('api/patient', patientModel)
+      console.log(result.data)
+    }
+
+    addNewPatient();
+
+   // setValues(patientModel);
+   // console.log(values);
+
+
    }
 
    
-  }
+  }////
+
+
 
   return (
     <Container maxWidth='xs' >

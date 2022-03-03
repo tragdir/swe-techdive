@@ -14,6 +14,9 @@ import { CssBaseline } from "@mui/material";
 import { AppContext } from "./context";
 import AdminDetailsPage from "./pages/AdminDetailsPage";
 import AddNewPatient from "./pages/AddNewPatient";
+import AddPatient from "./components/controls/AddPatient"
+
+
 
 function App() {
   const [patientInfo, setPatientInfo] = useState([]);
@@ -64,7 +67,7 @@ function App() {
             path="/patient/:patient_id"
             element={<PatientDetailsPage />}
           />
-          <Route path="/addnewpatient" element={<AddNewPatient />} />
+          <Route path="/addnewpatient" element={<AddPatient />} />
           <Route path="/admin" element={<AdminTable />} />
           <Route path="/admin/patient/:patient_id" element={<AdminDetailsPage />} />
           <Route path="*" element={<NotFound />} />
