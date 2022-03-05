@@ -25,6 +25,8 @@ import FormInput from "../components/controls/FormInput";
 import Popup from "../components/Popup";
 import MenuPopupState from "../components/controls/MenuPopupState";
 import PatientUpdateForm from "../components/controls/PatientUpdateForm";
+import ExamUpdateForm from "../components/controls/ExamUpdateForm";
+import DefaultButton from "../components/controls/DefaultButton";
 
 
 const AdminDetailsPage = () => {
@@ -36,6 +38,9 @@ const AdminDetailsPage = () => {
   const [singleExam, setSingleExam] = useState([]);
   const [openPopup, setOpenPopup] = useState(false)
   const [openPatientForm, setOpenPatientForm] = useState(false)
+  const [openExamForm, setOpenExamForm] = useState(false)
+  const [addExamOpenPupup, setAddExamOpenPupup] = useState(false)
+
 
   const [deleteStatus, setDeleteStatus] = useState(false)
 
@@ -122,14 +127,26 @@ const AdminDetailsPage = () => {
         <FormInput singleExam={singleExam}/>
     </Popup>
       <Paper sx={{padding: "1rem", marginBottom: "1rem"}}>
-      <Link to={'/admin'} style={{ textDecoration: 'none' }}>
+        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Popup openPopup={addExamOpenPupup} setOpenPopup={setAddExamOpenPupup} title={`Adding Exam for: ${patientInfo[0]._id}`}>
+           {/* Vlad Form here */}
+           <Typography>Vlad's Add Exam Form</Typography>
+            </Popup>
+        <Link to={'/admin'} style={{ textDecoration: 'none' }}>
         <Button>
         <ArrowBackIcon/> Admin Table
         </Button>
         </Link>
-      <Typography  sx={{textAlign: "center"}}>
+        <Typography variant="h4"  sx={{textAlign: "center"}}>
             Patient Details
           </Typography>
+        <DefaultButton
+            text="Add New Exam"
+            variant="outlined"
+            onClick = {()=> setAddExamOpenPupup(true)}
+           
+          />
+        </div>
       </Paper>
       <div
         style={{
@@ -187,8 +204,8 @@ const AdminDetailsPage = () => {
       <Skeleton variant="text" />
       <Skeleton variant="rectangular" width={210} height={118} />
     </Stack>}
-            {examInfo.length ? 
-        <Card sx={{ marginLeft: "1rem", flexDirection: 'row'}}>
+            {examInfo.length ?
+        <Card sx={{ marginLeft: "1rem", flexDirection: 'row', padding: "0.3rem"}}>
           <Typography variant="h6">Exam Info: {examInfo.length} exam(s)</Typography>
           <Divider />
           <div sx={{display: "flex", flexDirection: 'row'}}>
@@ -196,12 +213,15 @@ const AdminDetailsPage = () => {
 
             return (
               <div key={index}>
-                 <Button onClick={() => handleClick(index)}>
+                <Popup openPopup={openExamForm} setOpenPopup={setOpenExamForm} btnName='Update' title={`Editing Exam: ${examInfo[index]._id}`}>
+                <ExamUpdateForm examInfo={examInfo[index]}/>
+                </Popup>
+                 <Button onClick={() => setOpenExamForm(true)}>
                      <EditIcon sx={{cursor: "pointer", color: "yellowgreen"}}/>
                  </Button>
                  <Button onClick={() => setExamId(examInfo[index]._id)}><DeleteForeverIcon sx={{color: "red"}}/></Button>
               <h3>Exam #{index + 1}</h3>
-              <Paper variant="outlined">
+              <Paper variant="outlined" sx={{padding: '0.2rem'}}>
               <Typography sx={{ mb: 1.5 }}  color="text.secondary">
                ID: {examInfo[index].patient}
               </Typography>
@@ -227,6 +247,9 @@ const AdminDetailsPage = () => {
                })}
             </Stack>
                 <Box>
+                <Typography sx={{ mb: 1.5, maxWidth: 400 }} color="text.secondary">
+                Key Findings: {examInfo[index].key_findings}
+              </Typography>
                 <Typography sx={{ mt: 1.5}} variant="caption">
                 Created: {new Date(examInfo[index].createdAt).toLocaleString()}
               </Typography>
