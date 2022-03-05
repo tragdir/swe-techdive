@@ -21,6 +21,7 @@ import Chip from '@mui/material/Chip';
 import Snackbar from '@mui/material/Snackbar';
 import { Alert } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import BrokenImage from "@mui/icons-material/BrokenImage";
 import FormInput from "../components/controls/FormInput";
 import Popup from "../components/Popup";
 import MenuPopupState from "../components/controls/MenuPopupState";
@@ -40,10 +41,6 @@ const AdminDetailsPage = () => {
   const [openPatientForm, setOpenPatientForm] = useState(false)
   const [openExamForm, setOpenExamForm] = useState(false)
   const [addExamOpenPupup, setAddExamOpenPupup] = useState(false)
-
-
-  const [deleteStatus, setDeleteStatus] = useState(false)
-
 
     const [state, setState] = useState({
       open: false,
@@ -206,7 +203,7 @@ const AdminDetailsPage = () => {
     </Stack>}
             {examInfo.length ?
         <Card sx={{ marginLeft: "1rem", flexDirection: 'row', padding: "0.3rem"}}>
-          <Typography variant="h6">Exam Info: {examInfo.length} exam(s)</Typography>
+          <Typography variant="h6">Exam Info: {examInfo.length} {examInfo.length > 1 ? 'exams' : 'exam'}</Typography>
           <Divider />
           <div sx={{display: "flex", flexDirection: 'row'}}>
           {examInfo?.map((item, index) => {
@@ -238,7 +235,7 @@ const AdminDetailsPage = () => {
             image={`https://ohif-hack-diversity-covid.s3.amazonaws.com/covid-png/${examInfo[index].image}`}
             alt="xr-image"
           />
-            :  <Skeleton variant="rectangular" width={300} height={200} /> }
+            :  <BrokenImage sx={{width:"300px", height:"200px", backgroundColor: 'gray'}} /> }
           <Stack direction="row" spacing={5} sx={{marginTop: ".5rem", marginBottom: ".5rem"}}>
                {examInfo[index].score.map((item, key) => {
                  return (

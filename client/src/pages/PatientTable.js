@@ -9,7 +9,7 @@ import { CardMedia } from '@mui/material';
 import { AppContext } from "../context";
 import { useTable, useGlobalFilter, useSortBy, useColumnOrder} from "react-table";
 import GlobalFilter from "../components/GlobalFilter";
-
+import BrokenImageIcon from '@mui/icons-material/BrokenImage';
 
 const PatientTable = () => {
 
@@ -36,15 +36,17 @@ const {patientInfo, isLoading, setPatientInfo, setEditValue} = useContext(AppCon
             }
 
               if (key === "image"){
+
                 return {
                   Header: "Xray Image",
                   accessor: key,
-                  Cell: ({ value }) => <CardMedia
+                  Cell: ({ value }) => value ? <CardMedia
                   component="img"
                   height="80px"
-                  image={`https://ohif-hack-diversity-covid.s3.amazonaws.com/covid-png/${value}`}
+                  image={`https://ohif-hack-diversity-covid.s3.amazonaws.com/covid-png/${value}`}    
                   alt="xray-image"
-                  />
+                  
+                  />: <BrokenImageIcon style={{height: "80px"}}/>
                 };
               }
               if (key === "score"){
