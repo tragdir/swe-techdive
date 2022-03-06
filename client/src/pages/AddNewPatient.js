@@ -4,96 +4,101 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import { FormControlLabel, RadioGroup, Radio, Container, FormLabel } from "@mui/material";
-
-
-import DateAdapter from '@mui/lab/AdapterDateFns';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
-
+import axios from 'axios';
 
 
 const AddNewPatient = () => {
 
   const initialValues = {
-    firstName: '',
-    lastName: '',
+ 
     age: '',
     gender: '',
     race: '',
     zipcode: '',
     latestBmi: '',
-    latestWeight: '',
     icoAdmit: '',
     mortality: ''
   }
 
   const initialErrorValues = {
-    firstName: false,
-    lastName: false,
+
     age: false,
     gender: false,
     race: false,
     zipcode: false,
     latestBmi: false,
-    latestWeight: false,
     icoAdmit: false,
     mortality: false
   }
 
   //intial component values
-  const [firstName, setFirstName] = useState(initialValues.firstName);
-  const [lastName, setLastName] = useState(initialValues.lastName);
-  const [age, setAge] = useState(Date.now);
+
+  const [age, setAge] = useState(initialValues.age);
   const [gender, setGender] = useState(initialValues.gender);
   const [race, setRace] = useState(initialValues.race);
   const [zipcode, setZipcode] = useState(initialValues.zipcode);
   const [latestBmi, setLatestBmi] = useState(initialValues.latestBmi);
-  const [latestWeight, setLatestWeight] = useState(initialValues.latestWeight);
   const [icoAdmit, setIcoAdmit] = useState(initialValues.icoAdmit);
   const [mortality, setmortality] = useState(initialValues.mortality);
-  const [value, setValue] = useState(null);//for our calander value
 
 
   //initial error values 
-  const [firstNameError, setFirstNameError] = useState(initialErrorValues.firstName);
-  const [lastNameError, setLastNameError] = useState(initialErrorValues.lastName);
+ 
   const [ageError, setAgeError] = useState(initialErrorValues.age);
   const [genderError, setGenderError] = useState(initialErrorValues.gender);
   const [raceError, setRaceError] = useState(initialErrorValues.race);
   const [zipcodeError, setZipcodeError] = useState(initialErrorValues.zipcode);
   const [latestBmiError, setLatestBmiError] = useState(initialErrorValues.latestBmi);
-  const [latestWeightError, setLatestWeightError] = useState(initialErrorValues.latestWeight);
   const [icoAdmitError, setIcoAdmitError] = useState(initialErrorValues.icoAdmit);
   const [mortalityError, setmortalityError] = useState(initialErrorValues.mortality);
 
 
-
-
-
-
+  const [values,setValues] = useState({});
 
 
   const handleSubmit = (e) => { //handles event when submit is clicked 
     e.preventDefault()
-
     errorReset();
-  
-    checkErrors();
+    
+  let patientModel =[];
 
     
-    getAge();
+   if(!hasErrors()){
+    patientModel = {
+      "age" : age,
+      "sex" : gender[0],
+      "race" : race,
+      "zip" : zipcode,
+      "latest_bmi" : latestBmi,
+      "icu_admit" : icoAdmit,
+      "mortality" : mortality
+    };
+  
+    //axios post
+    const   addNewPatient = async () =>{
+      const result = axios.post ('api/patient', patientModel)
+      console.log(result.data)
+    }
+
+    addNewPatient();
+
+   // setValues(patientModel);
+   // console.log(values);
 
 
+   }
 
-  }
+   
+  }////
+
+
 
   return (
     <Container maxWidth='xs' >
 
       <Box
         component="form"
-        onSubmit={handleSubmit}g
+        onSubmit={handleSubmit}
         sx={{
 
           height: 20,
@@ -106,128 +111,24 @@ const AddNewPatient = () => {
 
         <Grid container spacing={2}>
 
-          <Grid item xs={6}>
-            <TextField //firstName TextField
 
+        <Grid item xs={4}>
+            <TextField //Age
+            
               id="outlined-basic"
-              label="Firstname"
-              variant="standard"
-              error={firstNameError}
-              onChange={(e) => {
-                if (e.target.value != '') setFirstNameError(false);
-                setFirstName(e.target.value)
-              }}
-              
-            />
-          </Grid>
-
-          <Grid item xs={6}>
-            <TextField // lastName textfield
-              id="outlined-basic"
-              label="Lastname"
-              variant="standard"
-              error={lastNameError}
-              onChange={(e) => {
-                setLastName(e.target.value)
-                if (e.target.value != '') setLastNameError(false)
-              }}
-            />
-          </Grid>
-
-          <Grid item xs={6}>
-            <TextField //LatestBmi TextField
-              id="outlined-basic"
-              label="Latest Bmi"
+              label="Age"
               variant="standard"
               type="number"
-              error={latestBmiError}
+              error={ageError}
               onChange={(e) => {
-                setLatestBmi(e.target.value)
-                if (!isNaN(e.target.value) && parseInt(e.target.value) > 0 && e.target.value != '') { setLatestBmiError(false); }
+                setAge(e.target.value)
+                if (!isNaN(e.target.value) && parseInt(e.target.value) > 0 && e.target.value != '') { setAgeError(false); }
 
               }}
             />
           </Grid>
 
-          <Grid item xs={6}>
-            <TextField //LatestWeight Field
-              id="outlined-basic"
-              label="Latest Weight"
-              variant="standard"
-              type="number"
-              error={latestWeightError}
-              onChange={(e) => {
-                setLatestWeight(e.target.value)
-                if (!isNaN(e.target.value) && parseInt(e.target.value) > 0 && e.target.value != '') { setLatestWeightError(false); }
-              }}
-
-            />
-          </Grid>
-
-
-
-          <Grid item xs={6}>
-
-            <Container maxWidth="xs">
-              <FormLabel
-                required
-                error={icoAdmitError}
-
-              >
-                IcoAdmit:</FormLabel>
-              <RadioGroup //RadioButton Group for the IcoAdmit 
-                sx={{ flexDirection: 'column' }}
-                value={icoAdmit}
-                onChange={(e) => {
-                  setIcoAdmit(e.target.value)
-                  if (e.target.value != '') setIcoAdmitError(false)
-                }}
-              >
-                <FormControlLabel
-                  value='icoAdmit_Yes'
-                  control={<Radio />}
-                  label="Yes"
-                />
-                <FormControlLabel
-                  value='icoAdmit_No'
-                  control={<Radio />}
-                  label="No"
-                />
-              </RadioGroup>
-            </Container>
-
-          </Grid>
-
-          <Grid item xs={6}>
-            <Container maxWidth="xs">
-              <FormLabel
-                required
-                error={mortalityError}
-              >
-                Mortality:</FormLabel>
-              <RadioGroup //RadioButton Group for the MORTALITY 
-                sx={{ flexDirection: 'column' }}
-                value={mortality}
-                onChange={(e) => {
-                  setmortality(e.target.value)
-                  if (e.target.value != '') setmortalityError(false)
-                }}
-              >
-                <FormControlLabel
-                  value='mortality_Yes'
-                  control={<Radio />}
-                  label="Yes"
-                />
-                <FormControlLabel
-                  value='mortality_No'
-                  control={<Radio />}
-                  label="No"
-                />
-              </RadioGroup>
-            </Container>
-          </Grid>
-
-        <Grid item xs={12}>
+        <Grid item xs={8}>
         <Container maxWidth="sx" >
 
           <FormLabel 
@@ -262,34 +163,8 @@ const AddNewPatient = () => {
         </Container>
 
         </Grid>
-
-        </Grid>
-
-
-
-
-
-
-
-
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DatePicker
-
-            label="Birthdate:"
-            value={value}
-            onChange={(newValue) => {
-              setValue(newValue);
-
-            }}
-            renderInput={(params) => <TextField {...params} />}
-          />
-        </LocalizationProvider>
-
-
-
-
-
-
+          
+          
         <Container maxWidth="xs">
 
           <FormLabel
@@ -339,8 +214,7 @@ const AddNewPatient = () => {
 
         </Container>
 
-
-
+        <Grid item xs={6}>
         <TextField //Zipcode TextField
           id="outlined-basic"
           label="Zipcode"
@@ -352,20 +226,89 @@ const AddNewPatient = () => {
             if (!isNaN(e.target.value) && e.target.value.length == 5 && e.target.value != '') { setZipcodeError(false) }
           }}
         />
+        </Grid>
+        <Grid item xs={4}>
+            <TextField //Latest Bmi
+            
+              id="outlined-basic"
+              label="LatestBmi"
+              variant="standard"
+              type="number"
+              error={latestBmiError}
+              onChange={(e) => {
+                setLatestBmi(e.target.value)
+                if (!isNaN(e.target.value) && parseInt(e.target.value) > 0 && e.target.value != '') { setLatestBmiError(false); }
 
+              }}
+            />
+          </Grid>
 
+  
 
+          <Grid item xs={6}>
 
+            <Container maxWidth="xs">
+              <FormLabel
+                required
+                error={icoAdmitError}
 
+              >
+                IcoAdmit:</FormLabel>
+              <RadioGroup //RadioButton Group for the IcoAdmit 
+                sx={{ flexDirection: 'column' }}
+                value={icoAdmit}
+                onChange={(e) => {
+                  setIcoAdmit(e.target.value)
+                  if (e.target.value != '') setIcoAdmitError(false)
+                }}
+              >
+                <FormControlLabel
+                  value='Yes'
+                  control={<Radio />}
+                  label="Yes"
+                />
+                <FormControlLabel
+                  value='No'
+                  control={<Radio />}
+                  label="No"
+                />
+              </RadioGroup>
+            </Container>
 
+          </Grid>
 
+          <Grid item xs={6}>
+            <Container maxWidth="xs">
+              <FormLabel
+                required
+                error={mortalityError}
+              >
+                Mortality:</FormLabel>
+              <RadioGroup //RadioButton Group for the MORTALITY 
+                sx={{ flexDirection: 'column' }}
+                value={mortality}
+                onChange={(e) => {
+                  setmortality(e.target.value)
+                  if (e.target.value != '') setmortalityError(false)
+                }}
+              >
+                <FormControlLabel
+                  value='Yes'
+                  control={<Radio />}
+                  label="Yes"
+                />
+                <FormControlLabel
+                  value='No'
+                  control={<Radio />}
+                  label="No"
+                />
+              </RadioGroup>
+            </Container>
+          </Grid>
 
-
-
-
-
-
-
+ 
+        </Grid>
+       
         <Button variant="contained" type="submit">Submit</Button>
 
 
@@ -381,56 +324,34 @@ const AddNewPatient = () => {
   //FUNCTIONS
 
   function errorReset() {
-    setFirstNameError(false);
-    setLastNameError(false);
+  
     setAgeError(false);
     setGenderError(false);
     setRaceError(false);
     setZipcodeError(false);
     setLatestBmiError(false);
-    setLatestWeightError(false);
     setIcoAdmitError(false);
     setmortalityError(false);
   }
 
 
 
-  function checkErrors() {
-    
-    if (firstName == '') { setFirstNameError(true); }
-    if (lastName == '') { setLastNameError(true); }
-
-    //need to think about the age field
+  function hasErrors() {
+    const erros = new Array();
+    if (isNaN(age) || parseInt(age) < 0 || age == '') { setAgeError(true);
+     erros.push(true);}
 
 
-    if (gender == '') { setGenderError(true) }
-    if (race == '') { setRaceError(true) }
-    if (isNaN(zipcode) || zipcode.length < 5 || zipcode.length > 5 || zipcode == '') { setZipcodeError(true) }
-    if (isNaN(latestBmi) || parseInt(latestBmi) < 0 || latestBmi == '') { setLatestBmiError(true); }
-    if (isNaN(latestWeight) || parseInt(latestWeight) < 0 || latestWeight == '') { setLatestWeightError(true); }
-    if (icoAdmit == '') { setIcoAdmitError(true); }
-    if (mortality == '') { setmortalityError(true); }
+    if (gender == '') { setGenderError(true);erros.push(true);}
+    if (race == '') { setRaceError(true);erros.push(true); }
+    if (isNaN(zipcode) || zipcode.length < 5 || zipcode.length > 5 || zipcode == '') { setZipcodeError(true); erros.push(true); }
+    if (isNaN(latestBmi) || parseInt(latestBmi) < 0 || latestBmi == '') { setLatestBmiError(true); erros.push(true); }
+    if (icoAdmit == '') { setIcoAdmitError(true);erros.push(true); }
+    if (mortality == '') { setmortalityError(true); erros.push(true);}
 
+  return erros.includes(true);
 
   }
-
-
-  function getAge() {
-    const today = new Date();
-    const birthDate = new Date(value);
-
-
-    let age = today.getFullYear() - birthDate.getFullYear();
-    let m = today.getMonth() - birthDate.getMonth();
-
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    return age;
-  }
-
-
-
 
 
 };
@@ -439,3 +360,4 @@ const AddNewPatient = () => {
 
 
 export default AddNewPatient;
+

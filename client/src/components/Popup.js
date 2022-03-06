@@ -11,23 +11,23 @@ const Popup = (props) => {
       setOpenPopup(false);
     };
   return (
-    <Dialog open={openPopup} onClose={handleClose}>
-        <DialogTitle sx={{display: 'flex', justifyContent:'space-between'}}>
+    <Dialog open={openPopup} onClose={handleClose} fullScreen
+    open={openPopup}>
+      
+        <DialogTitle sx={{display: 'block flow', justifyContent:'space-between'}}>
        <Typography sx={{marginTop: '10px'}}>
          {title} 
+
        </Typography>
        <Button color="error" onClick={handleClose}><CloseIcon/></Button>
         </DialogTitle>
         <Divider/>
+
+        
         <DialogContent>
           { children}
         </DialogContent>
-        {/* <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose} autoFocus>
-           {btnName}
-          </Button>
-        </DialogActions> */}
+
     </Dialog>
   )
 }
