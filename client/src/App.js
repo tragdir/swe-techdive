@@ -36,19 +36,6 @@ function App() {
 
   }, []);
 
-<<<<<<< HEAD
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await axios.get(`api/patients`);
-        const body = await result.data;
-        setAllPatients(body);
-        setIsLoading(false)
-      } catch (error) {
-        console.log(error);
-      }
-    };
-=======
  useEffect(() => {
   const fetchData = async () => {
     try {
@@ -60,7 +47,6 @@ function App() {
       console.log(error);
     }
   };
->>>>>>> 235e52c8c22fb7f20d96614e84fb35fab958e5f1
 
     fetchData();
 
