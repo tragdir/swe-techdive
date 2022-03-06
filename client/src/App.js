@@ -13,7 +13,6 @@ import { CssBaseline } from "@mui/material";
 
 import { AppContext } from "./context";
 import AdminDetailsPage from "./pages/AdminDetailsPage";
-import AddNewPatient from "./pages/AddNewPatient";
 
 function App() {
   const [patientInfo, setPatientInfo] = useState([]);
@@ -64,7 +63,6 @@ function App() {
             path="/patient/:patient_id"
             element={<PatientDetailsPage />}
           />
-          <Route path="/addnewpatient" element={<AddNewPatient />} />
           <Route path="/admin" element={<AdminTable />} />
           <Route path="/admin/patient/:patient_id" element={<AdminDetailsPage />} />
           <Route path="*" element={<NotFound />} />
