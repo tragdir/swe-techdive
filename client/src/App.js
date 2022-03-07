@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import axios from "axios";
@@ -13,7 +13,6 @@ import { CssBaseline } from "@mui/material";
 
 import { AppContext } from "./context";
 import AdminDetailsPage from "./pages/AdminDetailsPage";
-
 
 function App() {
   const [patientInfo, setPatientInfo] = useState([]);
@@ -48,18 +47,18 @@ function App() {
     }
   };
 
-  fetchData();
+    fetchData();
 
-}, []);
+  }, []);
 
   return (
     <Router>
       <CssBaseline />
       <Header />
-      <AppContext.Provider value={{patientInfo, isLoading, setPatientInfo, allPatients, setAllPatients}}>
+      <AppContext.Provider value={{ patientInfo, isLoading, setPatientInfo, allPatients, setAllPatients }}>
         <Routes>
-          <Route path="/" element={<PatientTable  />} exact />
-          <Route path="/patients" element={<PatientTable  />} />
+          <Route path="/" element={<PatientTable />} exact />
+          <Route path="/patients" element={<PatientTable />} />
           <Route
             path="/patient/:patient_id"
             element={<PatientDetailsPage />}
@@ -69,7 +68,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AppContext.Provider>
-      <MainFooter/>
+      <MainFooter />
     </Router>
   );
 }
