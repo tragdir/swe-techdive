@@ -10,7 +10,7 @@ import { deepPurple } from '@mui/material/colors';
 
 
 
-const NotFound = () => {
+const CreateExam = () => {
     const bgcolor = deepPurple[50]
     const state = {
         Image: '',
@@ -74,4 +74,4 @@ const NotFound = () => {
 
 
 
-export default NotFound;
+export default CreateExam;
