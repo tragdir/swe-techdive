@@ -68,8 +68,8 @@ export const createItem = (schemaName, name) => {
       item = new schemaName({
         image: body.image,
         score: body.score,
-        examInfo: body.examInfo,
-        keyFindings: body.keyFindings,
+        description: body.description,
+        key_findings: body.key_findings,
         patient: id
       }); //create new record for exam
     } else {
@@ -121,8 +121,9 @@ export const updateItem = (schemaName, name) => {
       });
     }
     const itemForUpdate = { ...arryOfItem }[0]
+    console.log(itemForUpdate);
     try {
-      await schemaName.findOneAndUpdate(name === "exam" ? { _id: req.params.id } : { _id: req.params.id }, itemForUpdate);
+      await schemaName.findOneAndUpdate({_id : req.params.id}, itemForUpdate);
     } catch (err) {
       console.error(`Hack_avengers - caught error in 'update${name}': ${err}`);
       console.error(err);
@@ -139,6 +140,7 @@ export const updateItem = (schemaName, name) => {
     });
   };
 }
+
 export const deleteItem = (PatientSchema, ExamSchema, name) => {
   return async (req, res) => {
     const oneExam = await ExamSchema.findOne({ patient: req.params.id });
@@ -154,13 +156,13 @@ export const deleteItem = (PatientSchema, ExamSchema, name) => {
           });
         }
 
-        if (!item) {
-          console.error(`Hack_avengers - 400 in 'delete${name}': ${name} not found!`);
-          return res.status(400).json({
-            success: false,
-            error: `${name} not found!`,
-          });
-        }
+        // if (!item) {
+        //   console.error(`Hack_avengers - 400 in 'delete${name}': ${name} not found!`);
+        //   return res.status(400).json({
+        //     success: false,
+        //     error: `${name} not found!`,
+        //   });
+        // }
 
         if(!oneExam){
           return res.status(200).json({
@@ -168,20 +170,18 @@ export const deleteItem = (PatientSchema, ExamSchema, name) => {
             // item: item,
           });
         }
-        
+
       }).catch(err => {
         console.error(`Hack_avengers - caught error in 'delete${name}': ${err}`);
         console.error(err);
         return err;
       });
-      //if (deletedPatient.Exam) {
 
       //** DELETING FROM EXAM SCHEMA*/
-
-
         if(!oneExam){
           return;
-        } else {
+        }else
+        {
           await ExamSchema.deleteOne({ patient: req.params.id }, (err, item) => {
             if (err) {
               console.error(`Hack_avengers - 400 in 'delete exam': ${err}`);
@@ -190,23 +190,23 @@ export const deleteItem = (PatientSchema, ExamSchema, name) => {
                 error: err,
               });
             }
-  
-            if (!item) {
-              console.error(`Hack_avengers - 400 in 'delete${name}': ${name} not found!`);
-              return res.status(400).json({
-                success: false,
-                error: `exam data not found!`,
-              });
-            }
 
-  
+            // if (!item) {
+            //   console.error(`Hack_avengers - 400 in 'delete${name}': ${name} not found!`);
+            //   return res.status(400).json({
+            //     success: false,
+            //     error: `exam data not found!`,
+            //   });
+            // }
+
+
             return (
               // res.setHeader('Content-Type', 'application/json'),
               res.status(200).json({
               success: true,
             }));
           }).catch(err => {
-            console.error(`Hack_avengers - caught error in 'delete${name}': ${err}`);
+            console.error(`Hack_avengers - caught error in 'delete exam': ${err}`);
             console.error(err);
             return err;
           });
@@ -223,13 +223,13 @@ export const deleteItem = (PatientSchema, ExamSchema, name) => {
           });
         }
 
-        if (!item) {
-          console.error(`Hack_avengers - 400 in 'delete${name}': ${name} not found!`);
-          return res.status(400).json({
-            success: false,
-            error: `${name} not found!`,
-          });
-        }
+        // if (!item) {
+        //   console.error(`Hack_avengers - 400 in 'delete${name}': ${name} not found!`);
+        //   return res.status(400).json({
+        //     success: false,
+        //     error: `${name} not found!`,
+        //   });
+        // }
 
         return (
         res.status(200).json({

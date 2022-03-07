@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import axios from "axios";
@@ -13,7 +13,7 @@ import { CssBaseline } from "@mui/material";
 
 import { AppContext } from "./context";
 import AdminDetailsPage from "./pages/AdminDetailsPage";
-
+import Footer from "./components/Footer";
 
 function App() {
   const [patientInfo, setPatientInfo] = useState([]);
@@ -23,7 +23,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await axios.get(`api/data`);
+        const result = await axios.get(`/api/data`);
         const body = await result.data;
         setPatientInfo(body);
         setIsLoading(false)
@@ -39,7 +39,7 @@ function App() {
  useEffect(() => {
   const fetchData = async () => {
     try {
-      const result = await axios.get(`api/patients`);
+      const result = await axios.get(`/api/patients`);
       const body = await result.data;
       setAllPatients(body);
       setIsLoading(false)
@@ -48,18 +48,18 @@ function App() {
     }
   };
 
-  fetchData();
+    fetchData();
 
-}, []);
+  }, []);
 
   return (
     <Router>
       <CssBaseline />
       <Header />
-      <AppContext.Provider value={{patientInfo, isLoading, setPatientInfo, allPatients, setAllPatients}}>
+      <AppContext.Provider value={{ patientInfo, isLoading, setPatientInfo, allPatients, setAllPatients }}>
         <Routes>
-          <Route path="/" element={<PatientTable  />} exact />
-          <Route path="/patients" element={<PatientTable  />} />
+          <Route path="/" element={<PatientTable />} exact />
+          <Route path="/patients" element={<PatientTable />} />
           <Route
             path="/patient/:patient_id"
             element={<PatientDetailsPage />}
@@ -69,7 +69,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AppContext.Provider>
-      <MainFooter/>
+      <Footer />
     </Router>
   );
 }
