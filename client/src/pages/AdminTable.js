@@ -160,11 +160,25 @@ const {preGlobalFilteredRows,
       )
     }
 
+
+
   return (
     <div>
+
       <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} title="Add New Patient">
       <AddPatientForm/>
       </Popup>
+
+
+
+
+
+
+
+
+
+
+
       <Snackbar open={alert.open} autoHideDuration={4000} onClose={handleClose}>
       <Alert onClose={handleClose} severity="success">
           Delete successful!

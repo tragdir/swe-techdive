@@ -15,37 +15,18 @@ import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Skeleton from '@mui/material/Skeleton';
 import Chip from '@mui/material/Chip';
+import BrokenImageIcon from '@mui/icons-material/BrokenImage';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import useFetch from "../components/UseFetch";
 
 
+
 const PatientDetailsPage = () => {
-  // const [isLoading, setIsLoading] = useState(true)
-  // const [examInfo, setExamInfo] = useState([]);
-  // const [patientInfo, setPatientInfo] = useState([])
   const { patient_id } = useParams();
 
  const {itemInfo: patientInfo, isLoading} = useFetch(`patient/${patient_id}`);
  
  const {itemInfo: examInfo} = useFetch(`exam/${patient_id}`);
-
-  // useEffect(() => {
-  //   const fetchData = async (name, id, stateType) => {
-  //     try {
-  //       const result = await axios.get(`/api/${name}/${id}`);
-  //       const body = result.data;
-  //       stateType(body);
-  //       setIsLoading(false)
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-
-  //   fetchData("patient", patient_id, setPatientInfo);
-  //   fetchData("exam", patient_id, setExamInfo);
-   
-  // }, [patient_id]);
-
 
   const patientRender = () => {
     if(!isLoading){
@@ -57,12 +38,6 @@ const PatientDetailsPage = () => {
 
   
   patientRender();
-
-// Reload page
-// function refreshPage() {
-//   window.location.reload();
-// }
-
   
  
   // Birixia color control
@@ -140,7 +115,7 @@ const PatientDetailsPage = () => {
         </Card>
 
         <Card sx={{ marginLeft: "1rem", flexDirection: 'row'}}>
-          <Typography variant='h5'>Exam Info: {examInfo.length} exam(s)</Typography>
+          <Typography variant='h5'>Exam Info: {examInfo.length} {examInfo.length > 1 ? 'exams' : 'exam'}</Typography>
           <Divider />
           <div sx={{display: "flex", flexDirection: 'row'}}>
           {examInfo?.map((item, index) => {
@@ -156,7 +131,7 @@ const PatientDetailsPage = () => {
                Exam Type: {examInfo[index].description}
               </Typography>
               <Typography sx={{ mb: 1.5 }} variant="body2" color="text.secondary">
-               Url: {examInfo[index].image}
+               Url: {examInfo[index].image ? examInfo[index].image: 'N/A'}
               </Typography>
               {examInfo[index].image ?
               <CardMedia
@@ -165,7 +140,7 @@ const PatientDetailsPage = () => {
             image={`https://ohif-hack-diversity-covid.s3.amazonaws.com/covid-png/${examInfo[index].image}`}
             alt="xr-image"
           />
-            :  <Skeleton variant="rectangular" width={300} height={200} /> }
+            :  <BrokenImageIcon sx={{width:"300px", height:"200px", backgroundColor: 'gray'}} /> }
           <Stack direction="row" spacing={5} sx={{marginTop: ".5rem", marginBottom: ".5rem"}}>
                {examInfo[index].score.map((item, key) => {
                  return (

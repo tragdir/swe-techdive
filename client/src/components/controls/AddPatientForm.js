@@ -55,6 +55,9 @@ const AddPatientForm = () => {
 
   const [values,setValues] = useState({});
 
+  const [success,setSuccess] = React.useState(false);
+
+
 
   const handleSubmit = (e) => { //handles event when submit is clicked 
     e.preventDefault()
@@ -82,9 +85,8 @@ const AddPatientForm = () => {
 
     addNewPatient();
 
-
-    this.setState({ show_user_modal: false});
-
+  
+    
    }
 
    
@@ -308,7 +310,7 @@ const AddPatientForm = () => {
  
         </Grid>
        
-        <Button variant="contained" type="submit">Submit</Button>
+        <Button variant="contained" type="submit" >Submit</Button>
 
 
 
@@ -358,5 +360,5 @@ const AddPatientForm = () => {
 
 
 
-export default AddPatientForm;
+export default AddPatientForm ;
 
