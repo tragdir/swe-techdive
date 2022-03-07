@@ -1,8 +1,10 @@
 import React from "react";
-import { AppBar, Toolbar, Typography, Grid } from "@material-ui/core";
-import { Group, Info} from "@material-ui/icons";
+// import { AppBar, Toolbar, Typography, Grid } from "@material-ui/core";
+import { Group, Info} from "@mui/icons-material";
+import { AppBar, Toolbar, Typography, Grid } from "@mui/material";
 
-const Footer = () => <>
+const Footer = () =>
+<div style={{marginBottom: "0px"}}>
       <AppBar position="static" color = "primary" >
        <Grid container justify="center" style={{minHeight: "180px"}}>
             <Grid container item sm={6} xs={11} justify="space-between">
@@ -24,6 +26,7 @@ const Footer = () => <>
             </Grid>
         </Grid>
       </AppBar>
-    </>
+
+      </div>
 
 export default Footer;

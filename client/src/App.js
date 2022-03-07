@@ -13,6 +13,7 @@ import { CssBaseline } from "@mui/material";
 
 import { AppContext } from "./context";
 import AdminDetailsPage from "./pages/AdminDetailsPage";
+import Footer from "./components/Footer";
 
 function App() {
   const [patientInfo, setPatientInfo] = useState([]);
@@ -68,7 +69,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AppContext.Provider>
-      <MainFooter />
+      <Footer />
     </Router>
   );
 }

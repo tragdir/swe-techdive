@@ -95,19 +95,16 @@ const AddPatientForm = () => {
 
 
   return (
-    <Container maxWidth='xs' >
 
       <Box
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{
 
-          height: 20,
-          '& > :not(style)': { m: 1, width: '50ch' },
-
-        }}
-        noValidate
-        autoComplete="off"
+      component="form"
+      sx={{
+        '& .MuiTextField-root': { m: 1, width: '25ch' },
+      }}
+      noValidate
+      autoComplete="off"
+      onSubmit={handleSubmit}
       >
 
         <Grid container spacing={2}>
@@ -316,7 +313,7 @@ const AddPatientForm = () => {
 
       </Box>
 
-    </Container>
+   
   );
 
 
