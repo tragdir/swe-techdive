@@ -19,18 +19,23 @@ export default function ExamUpdateForm({examInfo}) {
             [name]: value
         })
     }
+
+
         const handleSubmit = async ({image, description, key_findings, score}) => {
             const scoreArray = score.toString().split("");
             let scoreParser = [];
 
             for(var i = 0; i < scoreArray.length; i++){
+              console.log(scoreArray[i])
+               if(scoreArray[i] !== '') {
                 scoreParser.push(parseInt(scoreArray[i]));
+               }
             }
 
-            console.log(scoreParser);
+           // console.log(scoreParser);
 
             const data = {image, description, key_findings, score: scoreParser};
-            console.log(data)
+            console.log(scoreParser)
                 await axios.put(`/api/exam/${examInfo._id}`, data)
                            .then(response => {
                             setUpdateState(response.data.success)
@@ -38,7 +43,7 @@ export default function ExamUpdateForm({examInfo}) {
 
                            })
                            .catch((e) => console.log(e))
-                           .finally(() => window.location.reload(false))
+                           //.finally(() => window.location.reload(false))
         }
 
 
@@ -94,22 +99,6 @@ export default function ExamUpdateForm({examInfo}) {
          onChange={handleInputChange}
         />
 
-
-    {/* <FormControl>
-      <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
-      <RadioGroup
-        row
-        aria-labelledby="demo-row-radio-buttons-group-label"
-        name="sex"
-        label="Gender"
-        value={values.sex}
-        onChange={handleInputChange}
-      >
-        <FormControlLabel value="F" control={<Radio />} label="Female" />
-        <FormControlLabel value="M" control={<Radio />} label="Male" />
-        <FormControlLabel value="other" control={<Radio />} label="Other" />
-      </RadioGroup>
-    </FormControl> */}
       </div>
       <div>
       <TextField

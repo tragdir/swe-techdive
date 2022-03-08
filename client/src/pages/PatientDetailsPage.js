@@ -62,14 +62,17 @@ const PatientDetailsPage = () => {
   return (
   <Container>
       <Paper sx={{padding: "1rem", marginBottom: "1rem"}}>
+       
+        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
         <Link to={'/'} style={{ textDecoration: 'none' }}>
         <Button>
-        <ArrowBackIcon/> Back
+        <ArrowBackIcon/> Back to Table
         </Button>
         </Link>
-      <Typography  sx={{textAlign: "center", marginTop: "-1rem"}}>
+        <Typography variant="h4"  sx={{textAlign: "center"}}>
             Patient Details
           </Typography>
+          </div>
       </Paper>
       <div
         style={{
