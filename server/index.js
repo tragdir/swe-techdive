@@ -2,6 +2,8 @@
 import express from "express";
 import mongoose from 'mongoose'
 import dotenv from "dotenv";
+import path from 'path'
+const __dirname = path.resolve();
 import {router} from './routes/router.js';
 if (process.env.NODE_ENV !== "production") {
     dotenv.config();
