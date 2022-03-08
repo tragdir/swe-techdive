@@ -13,7 +13,7 @@ import { CssBaseline } from "@mui/material";
 
 import { AppContext } from "./context";
 import AdminDetailsPage from "./pages/AdminDetailsPage";
-import Footer from "./components/Footer";
+import Footer from "./components/footer";
 
 function App() {
   const [patientInfo, setPatientInfo] = useState([]);
