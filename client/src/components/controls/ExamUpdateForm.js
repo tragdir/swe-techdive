@@ -23,14 +23,14 @@ export default function ExamUpdateForm({examInfo}) {
 
         const handleSubmit = async ({image, description, key_findings, score}) => {
 
-            const scoreArray = score.toString().split("").filter(element => element);
+            const scoreArray = score.split("").filter(i => i);
             let scoreParser = [];
 
-            //console.log(scoreArray);
+            console.log(scoreArray);
 
             for(var i = 0; i < scoreArray.length; i++){
-              //console.log(scoreArray[i])
-               if(scoreArray[i] !== '' || scoreArray[i] !== null || !isNaN(scoreArray[i])) {
+              console.log(scoreArray[i])
+               if(scoreArray[i] !== '' || scoreArray[i] !== null || !isNaN(scoreArray[i]) || scoreArray[i] != ",") {
                 scoreParser.push(parseInt((isNaN(scoreArray[i]) ? 0 : scoreArray[i])));
                }
             }
@@ -46,7 +46,7 @@ export default function ExamUpdateForm({examInfo}) {
 
                            })
                            .catch((e) => console.log(e))
-                           .finally(() => window.location.reload(false))
+                           //.finally(() => window.location.reload(false))
         }
 
 
