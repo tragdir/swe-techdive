@@ -211,12 +211,12 @@ const AddPatientForm = () => {
             }}
           >
             <FormControlLabel
-              value='Yes'
+              value='Y'
               control={<Radio />}
               label="Yes"
             />
             <FormControlLabel
-              value='No'
+              value='N'
               control={<Radio />}
               label="No"
             />
