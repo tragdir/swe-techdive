@@ -2,26 +2,28 @@
 import express from "express";
 import mongoose from 'mongoose'
 import dotenv from "dotenv";
-import path from 'path'
+import path from 'path';
+import { router } from './routes/router.js';
+
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config();
+}
 const __dirname = path.resolve();
-import {router} from './routes/router.js';
-// if (process.env.NODE_ENV !== "production") {
-//     dotenv.config();
-//   }
-  // Initialize app
-  const app = express();
+const app = express();
 const PORT = process.env.PORT || 8000;
-console.log(__dirname)
-
 app.use('/api', router);
-//   If production, serve client build
-if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, '../client/build')));
-    app.get('/*', (req, res) => { 
-    res.sendFile(path.resolve(__dirname + '../client/build/index.html')) 
-});
+//adding examRouter: commented out for impoting issue
+//app.use('/api', examRouter);
 
-  }
+
+//   If production, serve client build
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')));
+  app.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname + '../client/build/index.html'));
+  });
+}
+
 
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
