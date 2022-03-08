@@ -10,8 +10,7 @@
     },
     "scripts": {
         "startDev": "cd ./server && yarn server && cd ../client && yarn start",
-        "postinstall": "(cd server && yarn install); (cd client && yarn install)",
-        "heroku-postbuild": "cd client && npm install && npm run build"
+        "postinstall": "(cd server && yarn install); (cd client && yarn install)"
     },
     "eslintConfig": {
         "extends": "react-app"
