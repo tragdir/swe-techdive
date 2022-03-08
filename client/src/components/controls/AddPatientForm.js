@@ -16,7 +16,7 @@ const AddPatientForm = () => {
     race: '',
     zipcode: '',
     latestBmi: '',
-    icoAdmit: '',
+    icuAdmit: '',
     mortality: ''
   }
 
@@ -27,7 +27,7 @@ const AddPatientForm = () => {
     race: false,
     zipcode: false,
     latestBmi: false,
-    icoAdmit: false,
+    icuAdmit: false,
     mortality: false
   }
 
@@ -38,7 +38,7 @@ const AddPatientForm = () => {
   const [race, setRace] = useState(initialValues.race);
   const [zipcode, setZipcode] = useState(initialValues.zipcode);
   const [latestBmi, setLatestBmi] = useState(initialValues.latestBmi);
-  const [icoAdmit, setIcoAdmit] = useState(initialValues.icoAdmit);
+  const [icuAdmit, setIcuAdmit] = useState(initialValues.icuAdmit);
   const [mortality, setmortality] = useState(initialValues.mortality);
 
 
@@ -49,13 +49,9 @@ const AddPatientForm = () => {
   const [raceError, setRaceError] = useState(initialErrorValues.race);
   const [zipcodeError, setZipcodeError] = useState(initialErrorValues.zipcode);
   const [latestBmiError, setLatestBmiError] = useState(initialErrorValues.latestBmi);
-  const [icoAdmitError, setIcoAdmitError] = useState(initialErrorValues.icoAdmit);
+  const [icuAdmitError, setIcuAdmitError] = useState(initialErrorValues.icuAdmit);
   const [mortalityError, setmortalityError] = useState(initialErrorValues.mortality);
 
-
-  const [values,setValues] = useState({});
-
-  const [success,setSuccess] = React.useState(false);
 
 
 
@@ -73,20 +69,20 @@ const AddPatientForm = () => {
       "race" : race,
       "zip" : zipcode,
       "latest_bmi" : latestBmi,
-      "icu_admit" : icoAdmit,
+      "icu_admit" : icuAdmit,
       "mortality" : mortality
     };
   
     //axios post
     const   addNewPatient = async () =>{
       const result = axios.post ('api/patient', patientModel)
+      .catch((e) => console.log(e))
+      .finally(() => window.location.reload(false))
       console.log(result.data)
     }
 
     addNewPatient();
 
-  
-    
    }
 
    
@@ -120,7 +116,7 @@ const AddPatientForm = () => {
               error={ageError}
               onChange={(e) => {
                 setAge(e.target.value)
-                if (!isNaN(e.target.value) && parseInt(e.target.value) > 0 && e.target.value != '') { setAgeError(false); }
+                if (!isNaN(e.target.value) && parseInt(e.target.value) > 0 && e.target.value !== '') { setAgeError(false); }
 
               }}
             />
@@ -142,7 +138,7 @@ const AddPatientForm = () => {
 
             onChange={(e) => {
               setGender(e.target.value)
-              if (e.target.value != '') setGenderError(false)
+              if (e.target.value !== '') setGenderError(false)
             }}
 
           >
@@ -176,17 +172,17 @@ const AddPatientForm = () => {
             value={race}
             onChange={(e) => {
               setRace(e.target.value)
-              if (e.target.value != '') setRaceError(false)
+              if (e.target.value !== '') setRaceError(false)
             }}
           >
             <FormControlLabel
-              value='Native_Hawaiian_or_Pacific_Islander'
+              value='Native Hawaiian or Pacific Islander'
               control={<Radio />}
               label="Native Hawaiian or other Pacific Islander"
             />
 
             <FormControlLabel
-              value='Black_or_Afican_American'
+              value='Black or Afican American'
               control={<Radio />}
               label="Black or African American"
             />
@@ -221,7 +217,7 @@ const AddPatientForm = () => {
           error={zipcodeError}
           onChange={(e) => {
             setZipcode(e.target.value)
-            if (!isNaN(e.target.value) && e.target.value.length == 5 && e.target.value != '') { setZipcodeError(false) }
+            if (!isNaN(e.target.value) && e.target.value.length === 5 && e.target.value !== '') { setZipcodeError(false) }
           }}
         />
         </Grid>
@@ -235,7 +231,7 @@ const AddPatientForm = () => {
               error={latestBmiError}
               onChange={(e) => {
                 setLatestBmi(e.target.value)
-                if (!isNaN(e.target.value) && parseInt(e.target.value) > 0 && e.target.value != '') { setLatestBmiError(false); }
+                if (!isNaN(e.target.value) && parseInt(e.target.value) > 0 && e.target.value !== '') { setLatestBmiError(false); }
 
               }}
             />
@@ -248,16 +244,16 @@ const AddPatientForm = () => {
             <Container maxWidth="xs">
               <FormLabel
                 required
-                error={icoAdmitError}
+                error={icuAdmitError}
 
               >
-                IcoAdmit:</FormLabel>
-              <RadioGroup //RadioButton Group for the IcoAdmit 
+                IcuAdmit:</FormLabel>
+              <RadioGroup //RadioButton Group for the IcuAdmit 
                 sx={{ flexDirection: 'column' }}
-                value={icoAdmit}
+                value={icuAdmit}
                 onChange={(e) => {
-                  setIcoAdmit(e.target.value)
-                  if (e.target.value != '') setIcoAdmitError(false)
+                  setIcuAdmit(e.target.value)
+                  if (e.target.value !== '') setIcuAdmitError(false)
                 }}
               >
                 <FormControlLabel
@@ -287,7 +283,7 @@ const AddPatientForm = () => {
                 value={mortality}
                 onChange={(e) => {
                   setmortality(e.target.value)
-                  if (e.target.value != '') setmortalityError(false)
+                  if (e.target.value !== '') setmortalityError(false)
                 }}
               >
                 <FormControlLabel
@@ -328,24 +324,24 @@ const AddPatientForm = () => {
     setRaceError(false);
     setZipcodeError(false);
     setLatestBmiError(false);
-    setIcoAdmitError(false);
+    setIcuAdmitError(false);
     setmortalityError(false);
   }
 
 
 
   function hasErrors() {
-    const erros = new Array();
-    if (isNaN(age) || parseInt(age) < 0 || age == '') { setAgeError(true);
+    const erros = [];
+    if (isNaN(age) || parseInt(age) < 0 || age === '') { setAgeError(true);
      erros.push(true);}
 
 
-    if (gender == '') { setGenderError(true);erros.push(true);}
-    if (race == '') { setRaceError(true);erros.push(true); }
-    if (isNaN(zipcode) || zipcode.length < 5 || zipcode.length > 5 || zipcode == '') { setZipcodeError(true); erros.push(true); }
-    if (isNaN(latestBmi) || parseInt(latestBmi) < 0 || latestBmi == '') { setLatestBmiError(true); erros.push(true); }
-    if (icoAdmit == '') { setIcoAdmitError(true);erros.push(true); }
-    if (mortality == '') { setmortalityError(true); erros.push(true);}
+    if (gender === '') { setGenderError(true);erros.push(true);}
+    if (race === '') { setRaceError(true);erros.push(true); }
+    if (isNaN(zipcode) || zipcode.length < 5 || zipcode.length > 5 || zipcode === '') { setZipcodeError(true); erros.push(true); }
+    if (isNaN(latestBmi) || parseInt(latestBmi) < 0 || latestBmi === '') { setLatestBmiError(true); erros.push(true); }
+    if (icuAdmit === '') { setIcuAdmitError(true);erros.push(true); }
+    if (mortality === '') { setmortalityError(true); erros.push(true);}
 
   return erros.includes(true);
 

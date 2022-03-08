@@ -22,12 +22,12 @@ import Snackbar from '@mui/material/Snackbar';
 import { Alert } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import BrokenImage from "@mui/icons-material/BrokenImage";
-import FormInput from "../components/controls/FormInput";
 import Popup from "../components/Popup";
-import MenuPopupState from "../components/controls/MenuPopupState";
 import PatientUpdateForm from "../components/controls/PatientUpdateForm";
 import ExamUpdateForm from "../components/controls/ExamUpdateForm";
 import DefaultButton from "../components/controls/DefaultButton";
+import CreateExam from "../components/controls/CreateExam";
+
 
 
 const AdminDetailsPage = () => {
@@ -36,8 +36,6 @@ const AdminDetailsPage = () => {
   const [patientInfo, setPatientInfo] = useState([{patient: ""}])
   const { patient_id } = useParams();
   const [examId, setExamId] = useState('')
-  const [singleExam, setSingleExam] = useState([]);
-  const [openPopup, setOpenPopup] = useState(false)
   const [openPatientForm, setOpenPatientForm] = useState(false)
   const [openExamForm, setOpenExamForm] = useState(false)
   const [addExamOpenPupup, setAddExamOpenPupup] = useState(false)
@@ -65,11 +63,7 @@ const AdminDetailsPage = () => {
 
   }, [patient_id]);
 
-  function handleClick(index){
-    setSingleExam(examInfo[index]);
-    setOpenPopup(true);
- }
-
+  // Change object to an array to dynamicaly render
   const patientRender = () => {
     if(!isLoading){
       const objKey = Object.keys(patientInfo[0])
@@ -120,14 +114,10 @@ const AdminDetailsPage = () => {
           Delete successful!
       </Alert>
     </Snackbar>
-    <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} btnName='Update' title="Editing exam">
-        <FormInput singleExam={singleExam}/>
-    </Popup>
       <Paper sx={{padding: "1rem", marginBottom: "1rem"}}>
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
         <Popup openPopup={addExamOpenPupup} setOpenPopup={setAddExamOpenPupup} title={`Adding Exam for: ${patientInfo[0]._id}`}>
-           {/* Vlad Form here */}
-           <Typography>Vlad's Add Exam Form</Typography>
+           <CreateExam id={patientInfo[0]._id}/>
             </Popup>
         <Link to={'/admin'} style={{ textDecoration: 'none' }}>
         <Button>
