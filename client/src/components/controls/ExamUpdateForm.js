@@ -22,13 +22,16 @@ export default function ExamUpdateForm({examInfo}) {
 
 
         const handleSubmit = async ({image, description, key_findings, score}) => {
-            const scoreArray = score.toString().split("");
+
+            const scoreArray = score.toString().split("").filter(element => element);
             let scoreParser = [];
 
+            //console.log(scoreArray);
+
             for(var i = 0; i < scoreArray.length; i++){
-              console.log(scoreArray[i])
+              //console.log(scoreArray[i])
                if(scoreArray[i] !== '' || scoreArray[i] !== null || !isNaN(scoreArray[i])) {
-                scoreParser.push(parseInt(scoreArray[i]));
+                scoreParser.push(parseInt((isNaN(scoreArray[i]) ? 0 : scoreArray[i])));
                }
             }
 
@@ -39,11 +42,11 @@ export default function ExamUpdateForm({examInfo}) {
                 await axios.put(`/api/exam/${examInfo._id}`, data)
                            .then(response => {
                             setUpdateState(response.data.success)
-                            console.log(response.data)
+                            //console.log(response.data)
 
                            })
                            .catch((e) => console.log(e))
-                           //.finally(() => window.location.reload(false))
+                           .finally(() => window.location.reload(false))
         }
 
 
@@ -56,7 +59,7 @@ export default function ExamUpdateForm({examInfo}) {
         }
 
         //console.log(examInfo);
-        console.log(values.score)
+        //console.log(values.score)
         var scores = values.score;
 
         var stringParse = "";
