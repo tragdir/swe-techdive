@@ -2,10 +2,19 @@
 import express from "express";
 import mongoose from 'mongoose'
 import dotenv from "dotenv";
-dotenv.config();
 import {router} from './routes/router.js';
+if (process.env.NODE_ENV !== "production") {
+    dotenv.config();
+  }
 
+//   If production, serve client build
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, '../client/build')));
+    app.get('*', (req, res) => { 
+    res.sendFile(path.join(__dirname + '/client/build/index.html')) 
+});
 
+  }
 const app = express();
 const PORT = process.env.PORT || 8000;
 
