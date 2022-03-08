@@ -5,9 +5,9 @@ import dotenv from "dotenv";
 import path from 'path'
 const __dirname = path.resolve();
 import {router} from './routes/router.js';
-if (process.env.NODE_ENV !== "production") {
-    dotenv.config();
-  }
+// if (process.env.NODE_ENV !== "production") {
+//     dotenv.config();
+//   }
   // Initialize app
   const app = express();
 const PORT = process.env.PORT || 8000;
@@ -16,7 +16,7 @@ app.use('/api', router);
 //   If production, serve client build
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, '../client/build')));
-    app.get('*', (req, res) => { 
+    app.get('/*', (req, res) => { 
     res.sendFile(path.join(__dirname + '../client/build/index.html')) 
 });
 
