@@ -27,7 +27,7 @@ export default function ExamUpdateForm({examInfo}) {
 
             for(var i = 0; i < scoreArray.length; i++){
               console.log(scoreArray[i])
-               if(scoreArray[i] !== '') {
+               if(scoreArray[i] !== '' || scoreArray[i] !== null || !isNaN(scoreArray[i])) {
                 scoreParser.push(parseInt(scoreArray[i]));
                }
             }
