@@ -53,7 +53,7 @@ const PatientDetailsPage = () => {
   }
 
   if(examInfo === null) {
-    return <Typography>No Patient data </Typography>
+    return <Typography>No Exam data </Typography>
   }
   
  
@@ -71,6 +71,9 @@ const PatientDetailsPage = () => {
         </Link>
         <Typography variant="h4"  sx={{textAlign: "center"}}>
             Patient Details
+          </Typography>
+          <Typography variant="h4"  sx={{textAlign: "center", visibility:'hidden'}}>
+           Patient Details
           </Typography>
           </div>
       </Paper>

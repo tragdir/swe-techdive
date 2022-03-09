@@ -1,7 +1,7 @@
 import React from "react";
 // import { AppBar, Toolbar, Typography, Grid } from "@material-ui/core";
 import { Group, Info} from "@mui/icons-material";
-import { AppBar, Toolbar, Typography, Grid } from "@mui/material";
+import { AppBar, Typography, Grid } from "@mui/material";
 
 const Footer = () =>
 <div style={{marginBottom: "0px"}}>

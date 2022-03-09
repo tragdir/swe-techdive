@@ -10,7 +10,6 @@ export default function ExamUpdateForm({examInfo}) {
 
     const [updateState, setUpdateState] = useState(false)
     const [values, setValues] = useState(examInfo);
-    // console.log(values)
 
     const handleInputChange = e => {
         const { name, value } = e.target
@@ -23,44 +22,39 @@ export default function ExamUpdateForm({examInfo}) {
 
         const handleSubmit = async ({image, description, key_findings, score}) => {
 
-          console.log(typeof(score));
-          console.log(score);
+          // This code fixes the error: Object added to array of brixia when image url edited
+            let scoreArray;
 
             if(typeof(score) == "string"){
 
-              var scoreArray = score.split("");
+              scoreArray = score.split("");
 
-            }else if (typeof(score) == "object"){
+            } else if (typeof(score) == "object"){
 
-              var scoreArray = score.toString().split("").map(Number).filter(i => i);
+              scoreArray = score.toString().split("").map(Number).filter(i => i);
 
             }
 
             let scoreParser = [];
 
-            console.log(scoreArray);
-
             for(var i = 0; i < scoreArray.length; i++){
-              console.log(scoreArray[i])
               scoreParser.push(parseInt((isNaN(scoreArray[i]) ? 0 : scoreArray[i])));
 
             }
 
-           // console.log(scoreParser);
-
+           
+            // Destruction the values to send to the DB
             const data = {image, description, key_findings, score: scoreParser};
-            console.log(scoreParser)
                 await axios.put(`/api/exam/${examInfo._id}`, data)
                            .then(response => {
                             setUpdateState(response.data.success)
-                            //console.log(response.data)
 
                            })
                            .catch((e) => console.log(e))
-                           //.finally(() => window.location.reload(false))
+                           .finally(() => window.location.reload(false))
         }
 
-
+// Reset back to original
     const handleReset = async () => {
         setValues(examInfo)
     }
@@ -69,8 +63,7 @@ export default function ExamUpdateForm({examInfo}) {
             return <Typography>Exam updated successfuly!</Typography>
         }
 
-        //console.log(examInfo);
-        //console.log(values.score)
+        // Converting Brixia score array to string
         var scores = values.score;
 
         var stringParse = "";
@@ -79,7 +72,6 @@ export default function ExamUpdateForm({examInfo}) {
             stringParse += scores[i].toString();
         };
 
-        //console.log(stringParse);
 
   return (
     <Box

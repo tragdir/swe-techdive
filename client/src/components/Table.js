@@ -45,13 +45,10 @@ const MainTable = ({ columns, data, tableInstance}) => {
   
   const {
     getTableProps,
-    getTableBodyProps,
     headerGroups,
     rows,
     prepareRow,
-    preGlobalFilteredRows,
-    setGlobalFilter,
-    state,
+    
   } = tableInstance;
   
 

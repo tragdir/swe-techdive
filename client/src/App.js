@@ -7,7 +7,6 @@ import PatientDetailsPage from "./pages/PatientDetailsPage";
 import Header from "./components/Header";
 import NotFound from "./pages/NotFound";
 import AdminTable from "./pages/AdminTable";
-import MainFooter from "./components/MainFooter";
 // MUI
 import { CssBaseline } from "@mui/material";
 
