@@ -11,16 +11,17 @@ if (process.env.NODE_ENV !== 'production') {
 const __dirname = path.resolve();
 const app = express();
 const PORT = process.env.PORT || 8000;
-app.use('/api', router);
 //adding examRouter: commented out for impoting issue
 //app.use('/api', examRouter);
-
+// console.log(path.join(__dirname, '../client/'))
+app.use('/api', router);
 
 //   If production, serve client build
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
-  app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname + '../client/build/index.html'));
+  app.get('*', (req, res) => {
+    //res.sendFile(path.join(__dirname + '../client/build/index.html'));
+    res.sendFile(path.resolve(__dirname, '..', 'client', 'build', 'index.html'));
   });
 }
 
