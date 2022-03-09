@@ -14,7 +14,7 @@ const Footer = () =>
                         SWE COVID-19 Mini Project
                         Hack.Diversity 2022 Cohort.
                     </Typography>
-                    <a href="https://github.com/tragdir/swe-techdive">Source Code</a>
+                    <a href="https://github.com/tragdir/swe-techdive">Source code</a>
                 </Grid>
                 <Grid item sm={5} xs={11}>
                     <Group color="action" />
