@@ -8,6 +8,11 @@ import { router } from './routes/router.js';
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config();
 }
+
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
+
 const __dirname = path.resolve();
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -24,10 +29,6 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.resolve(__dirname, '..', 'client', 'build', 'index.html'));
   });
 }
-
-
-app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 // Databse config ************************************
 const dbUrl = process.env.DB_URL || "mongodb://127.0.0.1:27017/patientdb";

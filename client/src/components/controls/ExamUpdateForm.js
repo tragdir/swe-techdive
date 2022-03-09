@@ -57,7 +57,7 @@ export default function ExamUpdateForm({examInfo}) {
 
                            })
                            .catch((e) => console.log(e))
-                           .finally(() => window.location.reload(false))
+                           //.finally(() => window.location.reload(false))
         }
 
 
