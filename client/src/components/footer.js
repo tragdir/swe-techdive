@@ -20,7 +20,7 @@ const Footer = () =>
                     <Typography paragraph>
                          Team Hack-Avengers Members:
                          Amanda Bazelais, Wilyendri Duran, Melaku Tachbele, Malik Siguenza, Nicolas Salazar,
-                        Vladimir Pierre-Louis & Allyson Ochoa
+                        Vladimir Pierre-Louis, Allyson Ochoa & Rigoberto Rosa
                     </Typography>
                 </Grid>
             </Grid>
