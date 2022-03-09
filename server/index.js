@@ -8,13 +8,12 @@ import { router } from './routes/router.js';
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config();
 }
-
+const app = express();
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 
 const __dirname = path.resolve();
-const app = express();
 const PORT = process.env.PORT || 8000;
 //adding examRouter: commented out for impoting issue
 //app.use('/api', examRouter);
