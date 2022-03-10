@@ -22,15 +22,12 @@ const NotFound = () => {
         spacing={5}
       // sx={{ bgcolor: 'success.main' }}
       >
-        <Box sx={{ fontStyle: 'italic', fontFamily: '', color: 'primary.main', typography: 'h1', lineHeight: 'normal', fontSize: 200, letterSpacing: 20 }}>404 error</Box>
-        <Box sx={{ color: 'primary.main', lineHeight: 2, fontSize: 64, letterSpacing: 2 }}> <h4>THE PAGE YOU WERE LOOKING FOR DOES NOT EXIT </h4></Box>
-        <Box sx={{ color: 'primary.main', lineHeight: 2, fontSize: 50, letterSpacing: 2 }}> <h5>Click The Go Back Button To Return To Previous Page</h5> </Box>
-
-      </Grid>
-
-      <Grid container direction="column" alignItems="center" justify="center">
+        <Box sx={{ fontStyle: 'italic', fontFamily: 'Rob', color: 'black',  lineHeight: '', fontSize: 100, letterSpacing: 20 }}>404 error</Box>
+        <Box sx={{ color: 'black', lineHeight: "normal", fontSize: 30, letterSpacing: 2 }}> <h4>THE PAGE YOU WERE LOOKING FOR DOES NOT EXIT </h4></Box>
+        <Box sx={{ color: 'black', lineHeight: "normal", fontSize: 30, letterSpacing: 2 }}> <h5>Click The Go Back Button To Return To Previous Page</h5> </Box>
         <div><Button size="large" variant="contained" color="primary"
           onClick={() => <div>{window.history.back()}</div>}>Go back</Button></div>
+
       </Grid></div >
   );
 
